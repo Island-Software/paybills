@@ -5,6 +5,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ namespace API.Controllers
             this._context = context;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -45,6 +47,11 @@ namespace API.Controllers
             };
         }
 
+        private async Task<bool> UserExists(string userName)
+        {
+            return await _context.Users.AnyAsync(user => user.UserName == userName.ToLower());
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -66,11 +73,6 @@ namespace API.Controllers
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
-        }
-
-        private async Task<bool> UserExists(string userName)
-        {
-            return await _context.Users.AnyAsync(user => user.UserName == userName.ToLower());
         }
     }
 }

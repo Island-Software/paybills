@@ -35,7 +35,7 @@ namespace API
             services.AddScoped<ITokenService, TokenService>();
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+                opt.UseSqlite(_config["DefaultConnection"]);
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -60,7 +60,7 @@ namespace API
         {
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();                

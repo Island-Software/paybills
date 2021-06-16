@@ -12,11 +12,11 @@ namespace API
         {
             var host = CreateHostBuilder(args).Build();
 
-            // using (var scope = host.Services.CreateScope())
-            // {
-            //     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-            //     db.Database.Migrate();
-            // }
+            using (var scope = host.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+                db.Database.Migrate();
+            }
 
             host.Run();
         }

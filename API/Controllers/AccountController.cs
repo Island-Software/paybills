@@ -8,6 +8,7 @@ using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Controllers
 {
@@ -15,18 +16,22 @@ namespace API.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IConfiguration _config;
 
-        public AccountController(DataContext context, ITokenService tokenService)
+        public AccountController(DataContext context, ITokenService tokenService, IConfiguration config)
         {
+            this._config = config;
             this._tokenService = tokenService;
             this._context = context;
         }
 
-        // [AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await UserExists(registerDto.UserName)) return BadRequest("Username already exists");
+
+            if (_config["allowNewUsers"] != "TRUE") return Forbid("Creation of new users is disabled");
 
             using var hmac = new HMACSHA512();
 

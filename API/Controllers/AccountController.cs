@@ -38,7 +38,7 @@ namespace API.Controllers
                 return BadRequest("Username already exists");
 
             if ((!_env.IsDevelopment()) && (_config["allowNewUsers"] != "TRUE"))
-                return Forbid("Creation of new users is disabled");
+                return BadRequest("Creation of new users is disabled");
 
             using var hmac = new HMACSHA512();
 

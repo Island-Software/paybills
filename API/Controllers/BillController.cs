@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Data;
@@ -60,6 +61,28 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return newBill;
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, BillDto bill)
+        {
+            if (!await BillExists(id))
+                return NotFound();
+
+            var repoBill = await _context.Bills.FindAsync(id);
+
+            repoBill.Value = bill.Value;
+            repoBill.Month = bill.Month;
+            repoBill.Year = bill.Year;
+        
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        private async Task<bool> BillExists(int id)
+        {
+            return await _context.Bills.FindAsync(id) != null;
         }
     }
 }

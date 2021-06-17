@@ -55,6 +55,27 @@ namespace API.Controllers
             return newBillType;
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, BillType billType)
+        {
+            if (!await TypeExists(id))
+                return NotFound();
+
+            var repoBillType = await _context.BillTypes.FindAsync(id);
+
+            repoBillType.Description = billType.Description;
+            repoBillType.Active = billType.Active;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        private async Task<bool> TypeExists(int id)
+        {
+            return await _context.BillTypes.FindAsync(id) != null;
+        }
+
         private async Task<bool> TypeExists(string description)
         {
             return await _context.BillTypes.AnyAsync(type => type.Description.ToLower() == description.ToLower());

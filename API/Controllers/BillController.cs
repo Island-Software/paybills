@@ -70,7 +70,8 @@ namespace API.Controllers
                 return NotFound();
 
             var repoBill = await _context.Bills.FindAsync(id);
-
+            
+            // TO DO: add automapper to project
             repoBill.Value = bill.Value;
             repoBill.Month = bill.Month;
             repoBill.Year = bill.Year;
@@ -79,7 +80,7 @@ namespace API.Controllers
 
             return Ok();
         }
-
+        
         private async Task<bool> BillExists(int id)
         {
             return await _context.Bills.FindAsync(id) != null;

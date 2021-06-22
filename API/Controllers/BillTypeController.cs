@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
@@ -17,26 +18,7 @@ namespace API.Controllers
         public BillTypeController(DataContext context)
         {
             this._context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BillType>>> GetBillTypes() => await _context.BillTypes.ToListAsync();
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BillType>> GetBillType(int id) => await _context.BillTypes.FindAsync(id);
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {        
-            var billType = await _context.BillTypes.FindAsync(id);
-
-            if (billType == null) return NotFound();
-
-            _context.BillTypes.Remove(billType);
-            await _context.SaveChangesAsync();
-            
-            return Ok();
-        }
+        }        
 
         [HttpPost("create")]
         public async Task<ActionResult<BillType>> Create(BillTypeDto billType)
@@ -55,6 +37,19 @@ namespace API.Controllers
             return newBillType;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BillType>>> GetBillTypes() => await _context.BillTypes.ToListAsync();
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BillType>> GetBillType(int id) => await _context.BillTypes.FindAsync(id);
+
+        [HttpGet]
+        [Route("search/{description}")]        
+        public async Task<ActionResult<IEnumerable<BillType>>> GetBillTypesByDescription(string description)
+        {
+            return await _context.BillTypes.Where(bt => bt.Description.ToLower().Contains(description.ToLower())).ToListAsync();
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, BillType billType)
         {
@@ -71,6 +66,18 @@ namespace API.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {        
+            var billType = await _context.BillTypes.FindAsync(id);
+
+            if (billType == null) return NotFound();
+
+            _context.BillTypes.Remove(billType);
+            await _context.SaveChangesAsync();
+            
+            return Ok();
+        }        
         private async Task<bool> TypeExists(int id)
         {
             return await _context.BillTypes.FindAsync(id) != null;

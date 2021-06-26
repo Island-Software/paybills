@@ -64,6 +64,7 @@ namespace API.Controllers
             return await _context.Users.AnyAsync(user => user.UserName == userName.ToLower());
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {

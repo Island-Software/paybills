@@ -1,5 +1,6 @@
 using System.Text;
 using API.Extensions;
+using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,10 +33,12 @@ namespace API
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();                
-            }
+            app.UseMiddleware<ExceptionMiddleware>();
+
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();                
+            // }
         
             // Commented because it brings the CORS error even with CORS policy set
             // app.UseHttpsRedirection();

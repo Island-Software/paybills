@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210616020709_PostgresInitial")]
-    partial class PostgresInitial
+    [Migration("20210626232638_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,12 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("LastActive")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("bytea");
@@ -86,6 +92,21 @@ namespace API.Data.Migrations
                     b.ToTable("BillTypes");
                 });
 
+            modelBuilder.Entity("AppUserBill", b =>
+                {
+                    b.Property<int>("BillsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BillsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppUserBill");
+                });
+
             modelBuilder.Entity("API.Entities.Bill", b =>
                 {
                     b.HasOne("API.Entities.BillType", "BillType")
@@ -93,6 +114,21 @@ namespace API.Data.Migrations
                         .HasForeignKey("BillTypeId");
 
                     b.Navigation("BillType");
+                });
+
+            modelBuilder.Entity("AppUserBill", b =>
+                {
+                    b.HasOne("API.Entities.Bill", null)
+                        .WithMany()
+                        .HasForeignKey("BillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

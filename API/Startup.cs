@@ -52,7 +52,7 @@ namespace API
                 .SetIsOriginAllowed(origin => true)
                 .AllowCredentials());
                 
-            // app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();            
 
             app.UseEndpoints(endpoints =>

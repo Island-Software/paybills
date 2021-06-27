@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs
 {
-    public class BillTypeDto
+    public class BillTypeRegisterDto
     {
         [Required]
         public string Description { get; set; }

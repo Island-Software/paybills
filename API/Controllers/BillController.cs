@@ -43,7 +43,7 @@ namespace API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<Bill>> Create(BillDto bill)
+        public async Task<ActionResult<Bill>> Create(BillRegisterDto bill)
         {
             var billType = await _billTypesRepository.GetBillTypeByIdAsync(bill.TypeId);
 
@@ -64,7 +64,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, BillDto bill)
+        public async Task<ActionResult> Update(int id, BillRegisterDto bill)
         {
             if (!await BillExists(id))
                 return NotFound();

@@ -1,91 +1,88 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     [Authorize]
     public class BillTypeController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+        private readonly IBillTypeRepository _repository;
 
-        public BillTypeController(DataContext context)
+        public BillTypeController(IBillTypeRepository repository, IMapper mapper)
         {
-            this._context = context;
-        }        
+            this._repository = repository;
+            this._mapper = mapper;
+        }
 
         [HttpPost("create")]
-        public async Task<ActionResult<BillType>> Create(BillTypeDto billType)
+        public async Task<ActionResult<BillTypeDto>> Create(BillTypeRegisterDto billType)
         {
             if (await TypeExists(billType.Description)) return BadRequest("Bill type already exists");
-            
+
             var newBillType = new BillType
             {
                 Description = billType.Description,
                 Active = billType.Active
             };
 
-            _context.BillTypes.Add(newBillType);
-            await _context.SaveChangesAsync();
+            _repository.Create(newBillType);
+            await _repository.SaveAllAsync();
 
-            return newBillType;
+            return _mapper.Map<BillTypeDto>(newBillType);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BillType>>> GetBillTypes() => await _context.BillTypes.ToListAsync();
+        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypes() => Ok(_mapper.Map<IEnumerable<BillTypeDto>>(await _repository.GetBillTypesAsync()));
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BillType>> GetBillType(int id) => await _context.BillTypes.FindAsync(id);
+        public async Task<ActionResult<BillTypeDto>> GetBillType(int id) => _mapper.Map<BillTypeDto>(await _repository.GetBillTypeByIdAsync(id));
 
         [HttpGet]
-        [Route("search/{description}")]        
-        public async Task<ActionResult<IEnumerable<BillType>>> GetBillTypesByDescription(string description)
-        {
-            return await _context.BillTypes.Where(bt => bt.Description.ToLower().Contains(description.ToLower())).ToListAsync();
-        }
+        [Route("search/{description}")]
+        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypesByDescription(string description) => Ok(await _repository.GetBillTypeByDescription(description));
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, BillType billType)
+        public async Task<ActionResult> Update(int id, BillTypeDto billType)
         {
-            if (!await TypeExists(id))
-                return NotFound();
+            if (!await TypeExists(id)) return NotFound();
 
-            var repoBillType = await _context.BillTypes.FindAsync(id);
+            var repoBillType = await _repository.GetBillTypeByIdAsync(id);
 
             repoBillType.Description = billType.Description;
             repoBillType.Active = billType.Active;
 
-            await _context.SaveChangesAsync();
+            await _repository.SaveAllAsync();
 
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
-        {        
-            var billType = await _context.BillTypes.FindAsync(id);
+        {
+            var billType = await _repository.GetBillTypeByIdAsync(id);
 
             if (billType == null) return NotFound();
 
-            _context.BillTypes.Remove(billType);
-            await _context.SaveChangesAsync();
-            
+            _repository.Delete(billType);
+            await _repository.SaveAllAsync();
+
             return Ok();
-        }        
+        }
         private async Task<bool> TypeExists(int id)
         {
-            return await _context.BillTypes.FindAsync(id) != null;
+            return await _repository.GetBillTypeByIdAsync(id) != null;
         }
 
         private async Task<bool> TypeExists(string description)
-        {
-            return await _context.BillTypes.AnyAsync(type => type.Description.ToLower() == description.ToLower());
+        {                    
+            return await _repository.BillTypeExists(description);
         }
     }
 }

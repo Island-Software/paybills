@@ -1,5 +1,6 @@
 using System;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,8 @@ namespace API.Extensions
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillTypeRepository, BillTypeRepository>();
             
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+
             services.AddDbContext<DataContext>(opt =>
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

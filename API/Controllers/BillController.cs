@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,39 +14,38 @@ namespace API.Controllers
     [Authorize]
     public class BillController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IBillRepository _billsRepository;
+        private readonly IBillTypeRepository _billTypesRepository;
 
-        public BillController(DataContext context)
+        public BillController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository)
         {
-            this._context = context;
+            this._billsRepository = billsRepository;
+            this._billTypesRepository = billTypesRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills()
-        {
-            return await _context.Bills.Include(b => b.BillType).ToListAsync();
-        }
+        public async Task<ActionResult<IEnumerable<Bill>>> GetBills() => Ok(await _billsRepository.GetBillsAsync());        
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bill>> GetBill(int id) => await _context.Bills.FindAsync(id);
+        public async Task<ActionResult<Bill>> GetBill(int id) => await _billsRepository.GetBillByIdAsync(id);
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
-        {        
-            var bill = await _context.Bills.FindAsync(id);
+        {
+            var bill = await _billsRepository.GetBillByIdAsync(id);
 
             if (bill == null) return NotFound();
 
-            _context.Bills.Remove(bill);
-            await _context.SaveChangesAsync();
-            
+            _billsRepository.Delete(bill);
+            await _billsRepository.SaveAllAsync();
+
             return Ok();
         }
 
         [HttpPost("create")]
         public async Task<ActionResult<Bill>> Create(BillDto bill)
-        {               
-            var billType = await _context.BillTypes.FindAsync(bill.TypeId);
+        {
+            var billType = await _billTypesRepository.GetBillTypeByIdAsync(bill.TypeId);
 
             if (billType == null) return BadRequest($"Bill type of id {bill.TypeId} not found");
 
@@ -57,8 +57,8 @@ namespace API.Controllers
                 Value = bill.Value
             };
 
-            _context.Bills.Add(newBill);
-            await _context.SaveChangesAsync();
+            _billsRepository.Create(newBill);
+            await _billsRepository.SaveAllAsync();
 
             return newBill;
         }
@@ -69,21 +69,22 @@ namespace API.Controllers
             if (!await BillExists(id))
                 return NotFound();
 
-            var repoBill = await _context.Bills.FindAsync(id);
-            
-            // TO DO: add automapper to project
+            var repoBill = await _billsRepository.GetBillByIdAsync(id);
+
+            // TO-DO: add automapper to project
             repoBill.Value = bill.Value;
             repoBill.Month = bill.Month;
             repoBill.Year = bill.Year;
-        
-            await _context.SaveChangesAsync();
+
+            await _billsRepository.SaveAllAsync();
 
             return Ok();
         }
-        
+
+        // TO-DO: create an out property for the found object
         private async Task<bool> BillExists(int id)
         {
-            return await _context.Bills.FindAsync(id) != null;
+            return await _billsRepository.GetBillByIdAsync(id) != null;
         }
     }
 }

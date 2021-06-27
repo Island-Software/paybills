@@ -14,6 +14,10 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBillRepository, BillRepository>();
+            services.AddScoped<IBillTypeRepository, BillTypeRepository>();
+            
             services.AddDbContext<DataContext>(opt =>
             {
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

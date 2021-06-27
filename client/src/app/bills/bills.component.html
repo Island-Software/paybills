@@ -1,0 +1,16 @@
+<div class="row mt-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>            
+            <tr *ngFor="let bill of user?.bills">
+                <td>{{bill.billType.description}}</td>
+                <td>{{bill.value | currency:"R$ "}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -6,5 +6,6 @@ namespace API.DTOs
         public float Value { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public BillTypeDto BillType { get; set; }
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { User } from '../models/user';
+import { LoginUser } from '../models/login-user';
 import { AccountService } from '../services/account.service';
 
 @Component({
@@ -20,13 +20,12 @@ export class NavComponent implements OnInit {
 
   login() {
     this.accountService.login(this.model).subscribe(response => {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/bills/bills');
     });
   }
 
   logout() {
-    this.accountService.logout();
-    this.router.navigateByUrl('/'); 
+    this.accountService.logout();    
     // Needed to show the login fields on navbar   
     window.location.reload();
   }

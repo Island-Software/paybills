@@ -1,4 +1,9 @@
+import { Bill } from "./bill";
+
 export interface User {
-    username: string;
-    token: string;
+    id: number;
+    userName: string;
+    created: Date;
+    lastActive: Date;
+    bills: Bill[];
 }

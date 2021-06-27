@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +26,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills() => Ok(await _billsRepository.GetBillsAsync());        
+        public async Task<ActionResult<IEnumerable<Bill>>> GetBills([FromQuery]UserParams userParams)
+        {
+            var bills = await _billsRepository.GetBillsAsync(userParams);
+
+            Response.AddPaginationHeader(bills.CurrentPage, bills.PageSize, bills.TotalCount, bills.TotalPages);
+
+            return Ok(bills);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBill(int id) => await _billsRepository.GetBillByIdAsync(id);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,9 +15,15 @@ namespace API.Data
 
         public void Delete(Bill bill) => _context.Bills.Remove(bill);
 
-        public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
+        public async Task<PagedList<Bill>> GetBillsAsync(UserParams userParams)
+        {
+            var query =  _context.Bills.Include(b => b.BillType)
+                .AsNoTracking();
 
-        public async Task<IEnumerable<Bill>> GetBillsAsync() => await _context.Bills.Include(b => b.BillType).ToListAsync();
+            return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+        } 
+
+        public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
         public void Update(Bill bill) => _context.Entry(bill).State = EntityState.Modified;
     }

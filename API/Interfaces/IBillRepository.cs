@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Interfaces
 {
@@ -10,9 +11,8 @@ namespace API.Interfaces
         void Create(Bill bill);
         void Delete(Bill bill);
         void Update(Bill bill);
-        // Change it to a base repository class
         Task<bool> SaveAllAsync();
-        Task<IEnumerable<Bill>> GetBillsAsync();
+        Task<PagedList<Bill>> GetBillsAsync(UserParams userParams);
         Task<Bill> GetBillByIdAsync(int id);                     
     }
 }

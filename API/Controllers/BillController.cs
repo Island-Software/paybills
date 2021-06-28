@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
@@ -7,6 +8,7 @@ using API.Entities;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,21 +20,26 @@ namespace API.Controllers
     {
         private readonly IBillRepository _billsRepository;
         private readonly IBillTypeRepository _billTypesRepository;
+        private readonly IMapper _mapper;
 
-        public BillController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository)
+        public BillController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper)
         {
+            this._mapper = mapper;
             this._billsRepository = billsRepository;
             this._billTypesRepository = billTypesRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bill>>> GetBills([FromQuery]UserParams userParams)
+        [Route("name/{username}")]
+        public async Task<ActionResult<IEnumerable<BillDto>>> GetBills(string username, [FromQuery] UserParams userParams)
         {
-            var bills = await _billsRepository.GetBillsAsync(userParams);
+            var bills = await _billsRepository.GetBillsAsync(username, userParams);
 
             Response.AddPaginationHeader(bills.CurrentPage, bills.PageSize, bills.TotalCount, bills.TotalPages);
 
-            return Ok(bills);
+            var billsToReturn = _mapper.Map<IEnumerable<BillDto>>(bills);            
+
+            return Ok(billsToReturn);
         }
 
         [HttpGet("{id}")]

@@ -12,7 +12,7 @@ namespace API.Interfaces
         void Delete(Bill bill);
         void Update(Bill bill);
         Task<bool> SaveAllAsync();
-        Task<PagedList<Bill>> GetBillsAsync(UserParams userParams);
+        Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams);
         Task<Bill> GetBillByIdAsync(int id);                     
     }
 }

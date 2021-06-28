@@ -7,5 +7,6 @@ namespace API.DTOs
         public int Month { get; set; }
         public int Year { get; set; }
         public BillTypeDto BillType { get; set; }
+        public string[] UserName { get; set; }
     }
 }

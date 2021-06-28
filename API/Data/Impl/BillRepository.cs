@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
 using API.Helpers;
@@ -15,10 +16,14 @@ namespace API.Data
 
         public void Delete(Bill bill) => _context.Bills.Remove(bill);
 
-        public async Task<PagedList<Bill>> GetBillsAsync(UserParams userParams)
+        public async Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams)
         {
-            var query =  _context.Bills.Include(b => b.BillType)
-                .AsNoTracking();
+            var query =  _context.Bills
+                .Include(b => b.BillType)
+                .Include(b => b.Users)
+                .Where(b => b.Users.Count(u => u.UserName == username) > 0)
+                .OrderBy(b => b.Id)                
+                .AsNoTracking();     
 
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         } 

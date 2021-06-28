@@ -9,6 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc.Cors;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace API
 {
@@ -22,10 +26,20 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-            services.AddApplicationServices(_config);            
+            services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();
+            services.AddApplicationServices(_config);
             services.AddControllers();
             services.AddIdentityServices(_config);
+            services.AddCors();            
+            // services.AddCors(options =>
+            // {
+            //     options.AddPolicy("CorsPolicy",
+            //         builder => builder.AllowAnyOrigin()
+            //                         .AllowAnyMethod()
+            //                         .AllowAnyHeader());
+            // });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,21 +53,40 @@ namespace API
             // {
             //     app.UseDeveloperExceptionPage();                
             // }
-        
+
             // Commented because it brings the CORS error even with CORS policy set
-            // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();                    
 
             app.UseRouting();
-                                                                                        
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));            
+
+            // app.UseCors("CorsPolicy");
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
             // app.UseCors(x => x
             //     .AllowAnyMethod()
             //     .AllowAnyHeader()
             //     .SetIsOriginAllowed(origin => true)
             //     .AllowCredentials());
-                
+
             app.UseAuthentication();
-            app.UseAuthorization();            
+            app.UseAuthorization();
+
+            // app.Use(next =>
+            // {
+            //     return async context =>
+            //     {
+            //         if (context.Request.Path.StartsWithSegments("/test"))
+            //         {
+            //             await context.Response.WriteAsync("Hit!");
+            //         }
+            //         else
+            //         {
+            //             await next(context);
+            //         }
+            //     };
+            // });
+
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

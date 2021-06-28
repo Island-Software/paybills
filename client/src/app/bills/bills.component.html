@@ -7,7 +7,7 @@
             </tr>
         </thead>
         <tbody>            
-            <tr *ngFor="let bill of user?.bills">
+            <tr *ngFor="let bill of bills">
                 <td>{{bill.billType.description}}</td>
                 <td>{{bill.value | currency:"R$ "}}</td>
             </tr>

@@ -6,6 +6,7 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -64,8 +65,8 @@ namespace API.Controllers
             return await _context.Users.AnyAsync(user => user.UserName == userName.ToLower());
         }
 
-        [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("login")]        
+        [EnableCors]
         public async Task<ActionResult<LoginResultDto>> Login(LoginDto loginDto)
         {
             var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.UserName.ToLower());

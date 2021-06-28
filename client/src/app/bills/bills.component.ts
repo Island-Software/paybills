@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Bill } from '../models/bill';
+import { Pagination } from '../models/pagination';
 import { User } from '../models/user';
+import { BillsService } from '../services/bills.service';
 import { UsersService } from '../services/users.service';
 
 @Component({
@@ -9,11 +11,13 @@ import { UsersService } from '../services/users.service';
   styleUrls: ['./bills.component.css']
 })
 export class BillsComponent implements OnInit {
-  user!: User;
   bills: Bill[] = [];
-  username: string | null | undefined;
+  pagination: Pagination | undefined;
+  pageNumber = 1;
+  pageSize = 5;
+  username: string = '';
 
-  constructor(private usersService: UsersService) { }
+  constructor(private billsService: BillsService) { }
 
   ngOnInit(): void {   
     this.loadUser(); 
@@ -21,11 +25,10 @@ export class BillsComponent implements OnInit {
 
   loadUser() {
     this.username = JSON.parse(localStorage.getItem('user')!).username;
-    this.usersService.getUser(this.username!).subscribe(user => {
-      this.user = user;     
-      console.log('user: ' + user);
-      console.log('bills: ' + user.bills);      
-    });    
+    this.billsService.getBills(this.username, this.pageNumber, this.pageSize).subscribe(bills => {
+      this.bills = bills.result;
+      this.pagination = bills.pagination;
+    })
   }
 
 }

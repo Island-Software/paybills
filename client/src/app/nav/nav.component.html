@@ -6,10 +6,10 @@
             <!-- ng-container is a better option to show/hide things because it doesn't generate HTML -->
             <ng-container *ngIf="accountService.currentUser$ | async">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink='/bills/bills' routerLinkActive='active'>Bills</a>
+                    <a class="nav-link" routerLink='/bills' routerLinkActive='active'>Bills</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink='/bills/bill-type' routerLinkActive='active'>Bill types</a>
+                    <a class="nav-link" routerLink='/bill-type-list' routerLinkActive='active'>Bill types</a>
                 </li>
                 <!-- <li class="nav-item">
                     <a class="nav-link" (click)="logout()">Logout</a>

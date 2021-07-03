@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row justify-content-center" style="text-align: center;">
+  <!-- <div class="row"> -->
+    <div class="col">
+
+      <div class="btn-group-vertical">
+        <button class="btn btn-primary mb-1" *ngFor="let billtype of billTypes" (click)="onSelect(billtype)">
+          {{billtype.description}}</button>
+        <button class="btn btn-success mt-2">Add new</button>
+      </div>
+
+    </div>
+    <div class="col">
+      <app-bill-type [billType]="selectedBillType"></app-bill-type>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container">
+    <div class="row">
+      <div class="col">
+        <ul class="heroes">
+          <li *ngFor="let billtype of billTypes">
+            <a routerLink="/bill-type/{{billtype.id}}">{{billtype.description}}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        Bill Type Detail
+      </div>      
+    </div>
+  </div> -->

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Bill } from '../models/bill';
 import { PaginatedResult } from '../models/pagination';
 
@@ -8,8 +9,7 @@ import { PaginatedResult } from '../models/pagination';
   providedIn: 'root'
 })
 export class BillsService {
-  baseUrl = 'http://localhost:5000/api/';
-  // bills: any;
+  baseUrl = environment.apiUrl;
   paginatedResult: PaginatedResult<Bill[]> = new PaginatedResult<Bill[]>();
 
   constructor(private http: HttpClient) { }

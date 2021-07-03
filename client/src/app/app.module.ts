@@ -20,6 +20,7 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { BillsComponent } from './bills/bills.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import '@angular/common/locales/global/pt';
+import { BillTypeListComponent } from './bill-type-list/bill-type-list.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import '@angular/common/locales/global/pt';
     TestErrorsComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    BillsComponent
+    BillsComponent,
+    BillTypeListComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +41,7 @@ import '@angular/common/locales/global/pt';
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    SharedModule    
+    SharedModule   
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

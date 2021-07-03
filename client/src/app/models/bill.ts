@@ -7,3 +7,10 @@ export interface Bill {
     year: number;
     billType: BillType;
 }
+
+export interface NewBill {
+    value: number;
+    month: number;
+    year: number;
+    typeId: number;
+}

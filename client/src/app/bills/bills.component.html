@@ -1,87 +1,46 @@
-<!-- <div class="row mt-5">
-    <table class="table table-primary table-striped table-hover">
-        <thead>
-            <tr>
-                <th [width]=350>Name</th>
-                <th [width]=250>Value</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>            
-            <tr *ngFor="let bill of bills">
-                <td>{{bill.billType.description}}</td>
-                <td>{{bill.value | currency:"R$ "}}</td>
-                <td><button class="btn btn-primary" (click)="delete(bill)">Delete</button></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="row mt-5">
+  <table class="table table-primary table-striped table-hover">
+    <thead>
+      <tr>
+        <th [width]=350>Name</th>
+        <th [width]=250>Value</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bill of bills">
+        <td>{{bill.billType.description}}</td>
+        <td>{{bill.value | currency:"R$ "}}</td>
+        <td><button class="btn btn-primary" (click)="delete(bill)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-<button class="btn btn-success mb-2 mt-2">Add</button>
+<button type="button" class="btn btn-success" (click)="openModal(template)">Add bill</button>
 <div class="d-flex justify-content-center mt-2" *ngIf="pagination">
-    <pagination
-        [boundaryLinks]="true"
-        [totalItems]="pagination.totalItems"
-        [itemsPerPage]="pagination.itemsPerPage"
-        [(ngModel)]="pagination.currentPage"
-        (pageChanged)="pageChanged($event)"
-        previousText="&lsaquo;"
-        nextText="&rsaquo;"
-        firstText="&laquo;"
-        lastText="&raquo;">
+  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+    [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;"
+    firstText="&laquo;" lastText="&raquo;">
 
-    </pagination>
+  </pagination>
 </div>
- -->
 
-
- <button type="button" mdbBtn color="default" rounded="true" data-toggle="modal" data-target="#basicExample"
-  (click)="frame.show()" mdbWavesEffect>Launch Modal</button>
-
-<div mdbModal #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <mdb-icon fas icon="envelope" class="prefix grey-text"></mdb-icon>
-          <input type="email" id="defaultForm-email" [formControl]="loginFormModalEmail" class="form-control"
-                 mdbInput mdbValidate>
-          <label for="defaultForm-email">Your email</label>
-          <mdb-error
-            *ngIf="loginFormModalEmail.invalid && (loginFormModalEmail.dirty || loginFormModalEmail.touched)">
-            Input invalid
-          </mdb-error>
-          <mdb-success
-            *ngIf="loginFormModalEmail.valid && (loginFormModalEmail.dirty || loginFormModalEmail.touched)">Input
-            valid
-          </mdb-success>
-        </div>
-
-        <div class="md-form mb-4">
-          <mdb-icon fas icon="lock" class="prefix grey-text"></mdb-icon>
-          <input type="password" id="defaultForm-pass" [formControl]="loginFormModalPassword" class="form-control"
-                 mdbInput mdbValidate>
-          <label for="defaultForm-pass">Your password</label>
-          <mdb-error
-            *ngIf="loginFormModalPassword.invalid && (loginFormModalPassword.dirty || loginFormModalPassword.touched)">
-            Input invalid
-          </mdb-error>
-          <mdb-success
-            *ngIf="loginFormModalPassword.valid && (loginFormModalPassword.dirty || loginFormModalPassword.touched)">
-            Input valid
-          </mdb-success>
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button mdbBtn color="default" class="waves-light" mdbWavesEffect>Login</button>
-      </div>
-    </div>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">New bill</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-</div>
+  <div class="modal-body">
+      <label for="bill-type">Type</label>
+      <select class="form-control" [(ngModel)]="newBill.typeId" id="bill-type" required>
+        <option *ngFor="let billtype of billTypes" [value]="billtype.id">{{billtype.description}}</option>
+      </select>
+    <label for="value">Value</label>
+    <input type="text" id="value" name="value" class="form-control"
+      required minlength="4" [(ngModel)]="newBill.value" #name="ngModel">
+    <button type="button" class="btn btn-primary mr-1 mt-3" (click)="add(newBill)">Add</button>
+    <button type="button" class="btn btn-secondary mt-3" (click)="modalRef.hide()">Cancel</button>
+  </div>
+</ng-template>

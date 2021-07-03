@@ -1,10 +1,10 @@
 <div *ngIf="billType">
     <div class="container" style="text-align: left;">
         <div [hidden]="submitted">
-          <h1>Hero Form</h1>
-          <form (ngSubmit)="save()" #heroForm="ngForm">
+          <h1>Bill type</h1>
+          <form (ngSubmit)="save()" #billTypeForm="ngForm">
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">Description</label>
               <input type="text" class="form-control" id="description"
                      required
                      [(ngModel)]="billType.description" name="description"
@@ -21,7 +21,7 @@
                 <label for="isActive">Is active?</label>
             </div>
       
-            <button type="submit" class="btn btn-success" [disabled]="!heroForm.form.valid">Submit</button>
+            <button type="submit" class="btn btn-success" [disabled]="!billTypeForm.form.valid">Save</button>
             <!-- <button type="button" class="btn btn-default" (click)="newHero(); heroForm.reset()">New Hero</button> -->
           </form>
         </div>

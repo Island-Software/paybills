@@ -16,11 +16,29 @@ export class BillsComponent implements OnInit {
   pageNumber = 1;
   pageSize = 5;
   username: string = '';
+  inserting = false;
 
   constructor(private billsService: BillsService) { }
 
   ngOnInit(): void {   
     this.loadUser(); 
+  }
+
+  validatingForm: FormGroup;
+
+  ngOnInit() {
+    this.validatingForm = new FormGroup({
+      loginFormModalEmail: new FormControl('', Validators.email),
+      loginFormModalPassword: new FormControl('', Validators.required)
+    });
+  }
+
+  get loginFormModalEmail() {
+    return this.validatingForm.get('loginFormModalEmail');
+  }
+
+  get loginFormModalPassword() {
+    return this.validatingForm.get('loginFormModalPassword');
   }
 
   loadUser() {
@@ -36,4 +54,12 @@ export class BillsComponent implements OnInit {
     this.loadUser();
   }
 
+  add(bill: Bill) {
+    this.inserting = true;
+    // this.billsService.addBill(bill).subscribe();
+  }
+
+  delete(bill: Bill) {
+    console.log("Deleting " + bill.id);
+  }
 }

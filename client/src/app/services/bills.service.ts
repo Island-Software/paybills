@@ -32,4 +32,12 @@ export class BillsService {
       })
     );    
   }
+
+  addBill(bill: Bill) {
+    return this.http.post(this.baseUrl + 'bill/create', bill);
+  }
+
+  deleteBill(bill: Bill) {
+
+  }  
 }

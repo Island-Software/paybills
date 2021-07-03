@@ -31,4 +31,9 @@ export class BillsComponent implements OnInit {
     })
   }
 
+  pageChanged(event: any) {
+    this.pageNumber = event.page;
+    this.loadUser();
+  }
+
 }

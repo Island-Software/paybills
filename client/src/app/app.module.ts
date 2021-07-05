@@ -22,6 +22,7 @@ import { BillsComponent } from './bills/bills.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import '@angular/common/locales/global/pt';
 import { BillTypeListComponent } from './bill-type-list/bill-type-list.component';
+import { TextInputComponent } from './forms/text-input/text-input.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { BillTypeListComponent } from './bill-type-list/bill-type-list.component
     NotFoundComponent,
     ServerErrorComponent,
     BillsComponent,
-    BillTypeListComponent
+    BillTypeListComponent,
+    TextInputComponent
   ],
   imports: [
     BrowserModule,

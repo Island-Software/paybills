@@ -41,7 +41,7 @@ export class BillsComponent implements OnInit {
       billTypeId: new FormControl('', Validators.required),
       value: new FormControl('', Validators.required),
       month: new FormControl('', Validators.required),
-      year: new FormControl('', Validators.required)
+      year: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(4)])
     })
   }
 

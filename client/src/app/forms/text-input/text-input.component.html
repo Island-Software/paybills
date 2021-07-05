@@ -1,0 +1,9 @@
+<div class="form-group">    
+    <input 
+    [class.is-invalid]="ngControl.touched && ngControl.invalid"
+      type={{type}} 
+      class="form-control" 
+      [formControl]!="ngControl.control"
+      placeholder={{label}}>
+    <div class="invalid-feedback">Please enter the value</div>
+  </div>

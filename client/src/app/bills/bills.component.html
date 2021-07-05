@@ -37,27 +37,48 @@
 
     <form [formGroup]='newBillForm' (ngSubmit)="add()" autocomplete="off">
       <div class="form-group">
-        <select class="form-control" formControlName="billTypeId">
-          <option value="">- Please select -</option>
+        <select 
+          [class.is-invalid]='newBillForm.get("billTypeId")?.errors && newBillForm.get("billTypeId")?.touched'
+          class="form-control" 
+          formControlName="billTypeId">
+          <option value="">--- Select type ---</option>
           <option *ngFor="let billtype of billTypes" [value]="billtype.id">{{billtype.description}}</option>      
         </select>
+        <div class="invalid-feedback">Please select a type</div>
       </div>
-      
+
       <div class="form-group">
         <label for="value">Value</label>
-        <input type="text" id="value" class="form-control" formControlName="value">
+        <input 
+        [class.is-invalid]='newBillForm.get("value")?.errors && newBillForm.get("value")?.touched'
+          type="text" 
+          id="value" 
+          class="form-control" 
+          formControlName="value">
+        <div class="invalid-feedback">Please enter the value</div>
       </div>
-      
+
       <div class="form-group">
         <div class="input-group">
           <!-- <input type="text" id="month" class="form-control" formControlName="month" placeholder="Month"> -->
-          <select class="form-control" formControlName="month">
-            <option value="">- Please select -</option>
+          <select 
+            [class.is-invalid]='newBillForm.get("month")?.errors && newBillForm.get("month")?.touched'
+            class="form-control" 
+            formControlName="month">
+            <option value="">--- Select month ---</option>
             <option *ngFor="let month of months" [value]="month.id">{{month.name}}</option>      
-          </select>
+          </select>          
           <span class="input-group-text">/</span>
-          <input type="text" id="year" class="form-control" formControlName="year" placeholder="Year">
-        </div>
+          <input 
+            [class.is-invalid]='newBillForm.get("year")?.errors && newBillForm.get("year")?.touched'
+            type="text" 
+            id="year" 
+            class="form-control" 
+            formControlName="year" 
+            placeholder="Year (YYYY)">
+          <div *ngIf="newBillForm.get('month')?.hasError('required') && newBillForm.get('month')?.touched" class="invalid-feedback">Please enter the month</div>
+          <div *ngIf="newBillForm.get('year')?.hasError('required') && newBillForm.get('year')?.touched" class="invalid-feedback">Please enter the year</div>
+        </div>        
       </div>
 
       <div class="form-group">
@@ -69,7 +90,7 @@
       <button type="button" class="btn btn-secondary mt-3" (click)="modalRef.hide()">Cancel</button>
     </form>
 
-    <p>Form value: {{newBillForm.value | json}}</p>
-    <p>Form status: {{newBillForm.status | json}}</p>
+    <!-- <p>Form value: {{newBillForm.value | json}}</p> -->
+    <!-- <p>Form status: {{newBillForm.status | json}}</p> -->
   </div>
 </ng-template>

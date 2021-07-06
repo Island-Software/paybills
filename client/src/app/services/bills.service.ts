@@ -38,6 +38,6 @@ export class BillsService {
   }
 
   deleteBill(bill: Bill) {
-
+    return this.http.delete(this.baseUrl + 'bill/' + bill.id);
   }  
 }

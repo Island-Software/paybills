@@ -2,10 +2,11 @@
     <h2 class="text-center text-primary">Sign up</h2>
     <hr>
     <div class="form-group">
-        <input type="text" class="form-control" name="username" [(ngModel)]="model.username" placeholder="Username">
+        <input (keyup)="onKey($event)" type="text" class="form-control" name="username" [(ngModel)]="model.username" placeholder="Username">
         <input type="password" class="form-control mt-2" name="password" [(ngModel)]="model.password"
             placeholder="Password">
     </div>
+    {{model.password}}
 
     <!-- Testing parent to child communication -->
     <!-- <div class="form-group">

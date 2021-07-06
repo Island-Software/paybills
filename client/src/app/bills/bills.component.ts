@@ -65,7 +65,7 @@ export class BillsComponent implements OnInit {
     })
   }
 
-  add() {
+  add() {    
     console.log(this.newBillForm.value);
   }
   // add(newBill: NewBill) {
@@ -80,6 +80,8 @@ export class BillsComponent implements OnInit {
   // }
 
   delete(bill: Bill) {
-    console.log("Deleting " + bill.id);
+    this.billsService.deleteBill(bill).subscribe(
+      _result => this.loadUser()
+    );
   }
 }

@@ -1,4 +1,5 @@
 {
     "appService.deploySubpath": "publish",
-    "appService.defaultWebAppToDeploy": "/subscriptions/f08a2e9b-e572-48df-85d9-1bea8fa42015/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/paybills"
+    "appService.defaultWebAppToDeploy": "/subscriptions/f08a2e9b-e572-48df-85d9-1bea8fa42015/resourceGroups/appsvc_windows_centralus/providers/Microsoft.Web/sites/paybills",
+    "angular.enable-strict-mode-prompt": false
 }

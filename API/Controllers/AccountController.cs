@@ -85,7 +85,8 @@ namespace API.Controllers
             return new LoginResultDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                UserId = user.Id
             };
         }
     }

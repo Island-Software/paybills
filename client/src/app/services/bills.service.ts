@@ -2,8 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Bill } from '../models/bill';
+import { Bill, NewBillDto } from '../models/bill';
 import { PaginatedResult } from '../models/pagination';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class BillsService {
   baseUrl = environment.apiUrl;
   paginatedResult: PaginatedResult<Bill[]> = new PaginatedResult<Bill[]>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private usersService: UsersService) { }
 
   getBills(username: string, page?: number, itemsPerPage?: number) {    
     let params = new HttpParams();
@@ -33,7 +34,9 @@ export class BillsService {
     );    
   }
 
-  addBill(bill: Bill) {
+  addBill(bill: NewBillDto) {
+    bill.userId = this.usersService.getCurrentUserId();
+    console.log("Bill: " + bill);
     return this.http.post(this.baseUrl + 'bill/create', bill);
   }
 

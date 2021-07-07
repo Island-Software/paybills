@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Bill, NewBill } from '../models/bill';
+import { Bill, NewBillDto } from '../models/bill';
 import { Pagination } from '../models/pagination';
 import { BillsService } from '../services/bills.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -22,7 +22,7 @@ export class BillsComponent implements OnInit {
   pageSize = 5;
   username: string = '';
   modalRef!: BsModalRef;
-  newBill: NewBill = { value: 0, month: 0, year: 0, typeId: 0 };
+  newBill: NewBillDto = { value: 0, month: 0, year: 0, typeId: 0, userId: 0 };
   // Reactive forms
   newBillForm!: FormGroup;
   months = MONTHS;
@@ -38,7 +38,7 @@ export class BillsComponent implements OnInit {
 
   initializeForm() {
     this.newBillForm = new FormGroup({
-      billTypeId: new FormControl('', Validators.required),
+      typeId: new FormControl('', Validators.required),
       value: new FormControl('', Validators.required),
       month: new FormControl('', Validators.required),
       year: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(4)])
@@ -65,23 +65,11 @@ export class BillsComponent implements OnInit {
     })
   }
 
-  add() {    
-    console.log(this.newBillForm.value);
+  add() {
+    this.billsService.addBill(this.newBillForm.value).subscribe(_ => this.loadUser());
   }
-  // add(newBill: NewBill) {
-    // this.billTypesService.getBillType(newBill.typeId).subscribe(
-    //   gbt => {
-    //     let billToAdd: Bill = { id: 10, value: newBill.value, month: 6, year: 2021, billType: gbt}
-    //     this.bills.push(billToAdd);
-    //     this.modalRef.hide();
-    //   }
-    // ); 
-    // this.billsService.addBill(bill).subscribe();
-  // }
 
   delete(bill: Bill) {
-    this.billsService.deleteBill(bill).subscribe(
-      _result => this.loadUser()
-    );
+    this.billsService.deleteBill(bill).subscribe(_ => this.loadUser());
   }
 }

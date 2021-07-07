@@ -31,5 +31,19 @@ namespace API.Data
         public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
         public void Update(Bill bill) => _context.Entry(bill).State = EntityState.Modified;
+
+        public async Task<bool> AddBillToUser(int userId, int billId)
+        {
+            var user = await _context.Users
+                .Include(u => u.Bills)
+                .SingleAsync(u => u.Id == userId);
+
+            var bill = await _context.Bills
+                .SingleAsync(b => b.Id == billId);
+
+            user.Bills.Add(bill);
+
+            return true;
+        }
     }
 }

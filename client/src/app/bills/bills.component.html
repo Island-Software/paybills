@@ -52,9 +52,9 @@
       
       <div class="form-group">
         <select 
-          [class.is-invalid]='newBillForm.get("billTypeId")?.errors && newBillForm.get("billTypeId")?.touched'
+          [class.is-invalid]='newBillForm.get("typeId")?.errors && newBillForm.get("typeId")?.touched'
           class="form-control" 
-          formControlName="billTypeId">
+          formControlName="typeId">
           <option value="">--- Select type ---</option>
           <option *ngFor="let billtype of billTypes" [value]="billtype.id">{{billtype.description}}</option>      
         </select>

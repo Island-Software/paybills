@@ -18,4 +18,8 @@ export class UsersService {
   getUser(username: string) {
     return this.http.get<User>(this.baseUrl + 'users/name/' + username);
   }
+
+  getCurrentUserId() {
+    return JSON.parse(localStorage.getItem('user')!).userId;
+  }
 }

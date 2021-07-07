@@ -59,7 +59,7 @@ namespace API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<Bill>> Create(BillRegisterDto bill)
+        public async Task<ActionResult<BillDto>> Create(BillRegisterDto bill)
         {
             var billType = await _billTypesRepository.GetBillTypeByIdAsync(bill.TypeId);
 
@@ -75,8 +75,11 @@ namespace API.Controllers
 
             _billsRepository.Create(newBill);
             await _billsRepository.SaveAllAsync();
+            await _billsRepository.AddBillToUser(bill.UserId, newBill.Id);
+            await _billsRepository.SaveAllAsync();
 
-            return newBill;
+            var billToReturn = _mapper.Map<BillDto>(newBill);
+            return billToReturn;
         }
 
         [HttpPut("{id}")]

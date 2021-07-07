@@ -11,5 +11,7 @@ namespace API.DTOs
         public int Month { get; set; }
         [Required]
         public int Year { get; set; }
+        [Required]
+        public int UserId { get; set; }
     }
 }

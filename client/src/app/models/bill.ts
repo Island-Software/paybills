@@ -8,9 +8,10 @@ export interface Bill {
     billType: BillType;
 }
 
-export interface NewBill {
+export interface NewBillDto {
     value: number;
     month: number;
     year: number;
     typeId: number;
+    userId: number;
 }

@@ -26,8 +26,10 @@ export class NavComponent implements OnInit {
 
   logout() {
     this.accountService.logout();    
-    // Needed to show the login fields on navbar   
-    window.location.reload();
+    this.router.navigateByUrl('/home').then(_ => {
+      // Needed to show the login fields on navbar   
+      window.location.reload();
+    });    
   }
 
 }

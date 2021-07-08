@@ -55,42 +55,25 @@ namespace API
             // }
 
             // Commented because it brings the CORS error even with CORS policy set
-            // app.UseHttpsRedirection();                    
+            app.UseHttpsRedirection();                    
 
             app.UseRouting();
 
             // app.UseCors("CorsPolicy");
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
-
-            // app.UseCors(x => x
-            //     .AllowAnyMethod()
-            //     .AllowAnyHeader()
-            //     .SetIsOriginAllowed(origin => true)
-            //     .AllowCredentials());
+            // app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // app.Use(next =>
-            // {
-            //     return async context =>
-            //     {
-            //         if (context.Request.Path.StartsWithSegments("/test"))
-            //         {
-            //             await context.Response.WriteAsync("Hit!");
-            //         }
-            //         else
-            //         {
-            //             await next(context);
-            //         }
-            //     };
-            // });
+            // app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

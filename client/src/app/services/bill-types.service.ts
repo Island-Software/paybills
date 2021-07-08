@@ -14,14 +14,14 @@ export class BillTypesService {
   constructor(private http: HttpClient) { }
 
   getBillType(id: number): Observable<BillType> {
-    return this.http.get<BillType>(this.baseUrl + 'billtype/' + id);
+    return this.http.get<BillType>(this.baseUrl + '/billtype/' + id);
   }
 
   getBillTypes(): Observable<BillType[]> {
-    return this.http.get<BillType[]>(this.baseUrl + 'billtype');
+    return this.http.get<BillType[]>(this.baseUrl + '/billtype');
   }
 
   updateBillType(billType: BillType) {
-    return this.http.put(this.baseUrl + 'billtype/' + billType.id, billType);
+    return this.http.put(this.baseUrl + '/billtype/' + billType.id, billType);
   }
 }

@@ -23,7 +23,7 @@ export class BillsService {
       params = params.append('pageSize', itemsPerPage!.toString());
     }
 
-    return this.http.get<Bill[]>(this.baseUrl + 'bill/name/' + username, {observe: 'response', params}).pipe(
+    return this.http.get<Bill[]>(this.baseUrl + '/bill/name/' + username, {observe: 'response', params}).pipe(
       map(response => {
         this.paginatedResult.result = response.body!;
         if (response.headers.get('Pagination') !== null) {
@@ -37,10 +37,10 @@ export class BillsService {
   addBill(bill: NewBillDto) {
     bill.userId = this.usersService.getCurrentUserId();
     console.log("Bill: " + bill);
-    return this.http.post(this.baseUrl + 'bill/create', bill);
+    return this.http.post(this.baseUrl + '/bill/create', bill);
   }
 
   deleteBill(bill: Bill) {
-    return this.http.delete(this.baseUrl + 'bill/' + bill.id);
+    return this.http.delete(this.baseUrl + '/bill/' + bill.id);
   }  
 }

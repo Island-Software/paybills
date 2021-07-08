@@ -66,7 +66,7 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]        
-        [EnableCors]
+        // [EnableCors]
         public async Task<ActionResult<LoginResultDto>> Login(LoginDto loginDto)
         {
             var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.UserName.ToLower());

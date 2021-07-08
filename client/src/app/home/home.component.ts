@@ -20,11 +20,7 @@ export class HomeComponent implements OnInit {
   registerToggle() {
     this.registerMode = !this.registerMode;
   }
-
-  // getUsers() {
-  //   this.http.get('http://localhost:5000/api/users').subscribe(users => this.users = users);
-  // }
-
+  
   // Triggered by an emmiter on child component
   cancelRegisterMode(event: boolean) {
     this.registerMode = event;

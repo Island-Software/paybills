@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { BillType } from '../models/bill-type';
 import { BillTypesService } from '../services/bill-types.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-bill-type',
@@ -10,27 +10,18 @@ import { BillTypesService } from '../services/bill-types.service';
 })
 export class BillTypeComponent implements OnInit {
   @Input() billType?: BillType;
-  submitted = false;
-  // billType!: BillType;
+  @Output() saveBillTypeEvent = new EventEmitter<boolean>();
 
   constructor(
-    // private route: ActivatedRoute,
     private billTypeService: BillTypesService) { }
 
   ngOnInit(): void {
-    // this.getBillType();
-  }
-
-  getBillType(): void {
-    // const id = Number(this.route.snapshot.paramMap.get('id'));
-    // this.billTypeService.getBillType(id)
-    //   .subscribe(bt => this.billType = bt);
   }
 
   save() {
     if (this.billType) {
       this.billTypeService.updateBillType(this.billType)
-        .subscribe();
+        .subscribe(_ => this.saveBillTypeEvent.emit(true));
     }
   }
 }

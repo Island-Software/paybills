@@ -8,7 +8,9 @@ import { BillTypesService } from '../services/bill-types.service';
   styleUrls: ['./bill-type-list.component.css']
 })
 export class BillTypeListComponent implements OnInit {
+  originalBillTypes: BillType[] = [];
   billTypes: BillType[] = [];
+  searchText: string = "";
   selectedBillType?: BillType;
   
   constructor(private billTypeService: BillTypesService) { }
@@ -21,8 +23,22 @@ export class BillTypeListComponent implements OnInit {
     this.getBillTypes();
   }
 
+  closeChild(value: boolean) {
+    if (value) {
+      this.selectedBillType = undefined;
+    }
+  }
+
   getBillTypes() {
     this.billTypeService.getBillTypes()
-      .subscribe(bts => this.billTypes = bts);
+      .subscribe(bts => {
+        this.billTypes = bts;
+        this.originalBillTypes = bts;
+      });
+  }
+
+  onFilter() {
+    this.billTypes = this.originalBillTypes.filter(
+      t => t.description.toUpperCase().match(this.searchText.toUpperCase() + '.*')); // The /i option doesn't work
   }
 }

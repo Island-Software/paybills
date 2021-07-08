@@ -22,6 +22,6 @@ export class BillTypesService {
   }
 
   updateBillType(billType: BillType) {
-    return this.http.put(this.baseUrl, billType);
+    return this.http.put(this.baseUrl + 'billtype/' + billType.id, billType);
   }
 }

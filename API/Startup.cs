@@ -1,17 +1,10 @@
-using System.Text;
 using API.Extensions;
 using API.Middleware;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc.Cors;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace API
@@ -33,13 +26,6 @@ namespace API
             services.AddControllers();
             services.AddIdentityServices(_config);
             services.AddCors();            
-            // services.AddCors(options =>
-            // {
-            //     options.AddPolicy("CorsPolicy",
-            //         builder => builder.AllowAnyOrigin()
-            //                         .AllowAnyMethod()
-            //                         .AllowAnyHeader());
-            // });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,31 +35,30 @@ namespace API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            // if (env.IsDevelopment())
-            // {
-            //     app.UseDeveloperExceptionPage();                
-            // }
-
-            // Commented because it brings the CORS error even with CORS policy set
-            app.UseHttpsRedirection();                    
+            if (env.IsProduction())
+                app.UseHttpsRedirection();                    
 
             app.UseRouting();
 
-            // app.UseCors("CorsPolicy");
-            // app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            if (env.IsDevelopment())
+                app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             // app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            if (env.IsProduction())
+            {
+                app.UseDefaultFiles();
+                app.UseStaticFiles();
+            }            
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToController("Index", "Fallback");
+                if (env.IsProduction())
+                    endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

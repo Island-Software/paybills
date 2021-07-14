@@ -23,9 +23,9 @@ export class RegisterComponent implements OnInit {
     this.model.password = this.model.username;
   }
 
-  onKey(event: any) { // without type info
-    this.model.password = this.model.username;
-  }
+  // onKey(event: any) { // without type info
+  //   this.model.password = this.model.username;
+  // }
 
   register() {
     this.accountService.register(this.model).subscribe(response => {      

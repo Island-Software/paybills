@@ -21,6 +21,7 @@ export class BillTypeComponent implements OnInit {
   save() {
     if (this.billType) {
       this.billTypeService.updateBillType(this.billType)
+        // send an event to the parent component to close this component
         .subscribe(_ => this.saveBillTypeEvent.emit(true));
     }
   }

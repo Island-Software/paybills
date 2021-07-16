@@ -6,23 +6,25 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NavComponent } from './nav/nav.component'
+import { NavComponent } from './core/nav/nav.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './core/home/home.component';
 import { RegisterComponent } from './register/register.component';
-import { BillTypeComponent } from './bill-type/bill-type.component';
+import { BillTypeDetailComponent } from './bill-type/bill-type-detail/bill-type-detail.component';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './modules/shared.module';
 import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
-import { BillsComponent } from './bills/bills.component';
+import { BillListComponent } from './bill/bill-list/bill-list.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import '@angular/common/locales/global/pt';
-import { BillTypeListComponent } from './bill-type-list/bill-type-list.component';
+import { BillTypeListComponent } from './bill-type/bill-type-list/bill-type-list.component';
 import { TextInputComponent } from './forms/text-input/text-input.component';
+import { BillRegisterComponent } from './bill/bill-register/bill-register.component';
+import { BillTypeRegisterComponent } from './bill-type/bill-type-register/bill-type-register.component';
 
 @NgModule({
   declarations: [
@@ -30,13 +32,15 @@ import { TextInputComponent } from './forms/text-input/text-input.component';
     NavComponent,
     HomeComponent,
     RegisterComponent,
-    BillTypeComponent,
+    BillListComponent,
+    BillTypeListComponent,
+    BillTypeDetailComponent,
     TestErrorsComponent,
     NotFoundComponent,
     ServerErrorComponent,
-    BillsComponent,
-    BillTypeListComponent,
-    TextInputComponent
+    TextInputComponent,
+    BillRegisterComponent,
+    BillTypeRegisterComponent
   ],
   imports: [
     BrowserModule,

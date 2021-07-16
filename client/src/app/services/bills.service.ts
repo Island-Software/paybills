@@ -34,7 +34,7 @@ export class BillsService {
     );    
   }
 
-  addBill(bill: NewBillDto) {
+  createBill(bill: NewBillDto) {
     bill.userId = this.usersService.getCurrentUserId();
     console.log("Bill: " + bill);
     return this.http.post(this.baseUrl + 'bill/create', bill);

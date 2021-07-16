@@ -1,5 +1,5 @@
-export interface BillType {
-    id: number;
-    description: string;
-    active: boolean;
+export class BillType {
+    id: number = 0;
+    description: string = '';
+    active: boolean = true;
 }

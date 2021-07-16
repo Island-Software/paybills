@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left text-primary">New bill</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <form [formGroup]='newBillForm' (ngSubmit)="add()" autocomplete="off">
+
+    <label for="bill-type">Type</label>
+    <div class="form-group">
+      <select [class.is-invalid]='newBillForm.get("typeId")?.errors && newBillForm.get("typeId")?.touched'
+        class="form-control" formControlName="typeId">
+        <option value="">--- Select type ---</option>
+        <option *ngFor="let billtype of billTypes" [value]="billtype.id">{{billtype.description}}</option>
+      </select>
+      <div class="invalid-feedback">Please select a type</div>
+    </div>
+
+    <app-text-input [formControl]='newBillForm.controls["value"]' [label]='"Value"'></app-text-input>
+
+    <div class="form-group">
+      <div class="input-group">
+        <select [class.is-invalid]='newBillForm.get("month")?.errors && newBillForm.get("month")?.touched'
+          class="form-control mr-2" formControlName="month">
+          <option value="">--- Select month ---</option>
+          <option *ngFor="let month of months" [value]="month.id">{{month.name}}</option>
+        </select>
+        <app-text-input [formControl]='newBillForm.controls["year"]' [label]='"Year"'></app-text-input>
+        <div *ngIf="newBillForm.get('month')?.hasError('required') && newBillForm.get('month')?.touched"
+          class="invalid-feedback">Please enter the month</div>
+      </div>
+    </div>
+    <button class="btn btn-primary mr-1 mt-3" type="submit" [disabled]="!newBillForm.valid">Add</button>
+    <button type="button" class="btn btn-secondary mt-3" (click)="close()">Cancel</button>
+  </form>
+  <!-- <p>Form value: {{newBillForm.value | json}}</p>
+    <p>Form status: {{newBillForm.status | json}}</p> -->
+</div>

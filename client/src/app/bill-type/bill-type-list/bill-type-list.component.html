@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row">    
+    <div class="col mr-3 shadow p-3 mb-2 bg-body rounded">
+      <div class="input-group mb-3">
+        <span class="input-group-text">Filter</span>
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Type to search" 
+          aria-label="Filter by description"
+          [(ngModel)]="searchText"
+          (keyup)="onFilter()">
+      </div>
+
+      <div class="list-group mt-2">
+        <div *ngFor="let billType of billTypes">
+          <div class="d-flex flex-row-reverse bd-highlight mt-1">
+            <span class="border border-white border-5">
+            <button type="button" class="btn btn-danger" (click)="deleteBillType(billType)">Delete</button>
+          </span>
+            <button type="button" class="list-group-item list-group-item-action" (click)="onSelect(billType)">{{billType.description}}</button>        
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-success mt-3" (click)="openModal(billTypeAdd)">Add bill type</button>
+
+    </div>
+    <div class="col">      
+      <div *ngIf="selectedBillType" class="row shadow p-3 mb-2 bg-body rounded">
+        <app-bill-type-detail [billType]="selectedBillType" (saveBillTypeEvent)="closeChild($event)"></app-bill-type-detail>
+      </div>    
+    </div>
+  </div>
+</div>
+
+<ng-template #billTypeAdd>
+  <app-bill-type-register (addBillTypeEvent)="closeModal($event)"></app-bill-type-register>
+</ng-template>

@@ -28,6 +28,18 @@ namespace API.Data
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         } 
 
+        public async Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams)
+        {
+            var query =  _context.Bills
+                .Include(b => b.BillType)
+                .Include(b => b.Users)
+                .Where(b => b.Users.Count(u => u.UserName == username) > 0 && b.Month == month && b.Year == year)
+                .OrderBy(b => b.Id)                
+                .AsNoTracking();     
+
+            return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+        }
+
         public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
         public void Update(Bill bill) => _context.Entry(bill).State = EntityState.Modified;
@@ -45,5 +57,7 @@ namespace API.Data
 
             return true;
         }
+
+        
     }
 }

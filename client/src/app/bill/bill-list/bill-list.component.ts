@@ -3,7 +3,7 @@ import { Bill, NewBillDto } from '../../models/bill';
 import { Pagination } from '../../models/pagination';
 import { BillsService } from '../../services/bills.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { ToastrService } from 'ngx-toastr';
+import { MONTHS } from 'src/app/consts/months';
 
 @Component({
   selector: 'app-bill-list',
@@ -18,9 +18,14 @@ export class BillListComponent implements OnInit {
   username: string = '';
   modalRef!: BsModalRef;
   newBill: NewBillDto = { value: 0, month: 0, year: 0, typeId: 0, userId: 0 };
+  months = MONTHS;
+  selectedMonth: number;
+  selectedYear: number;
 
-  constructor(private billsService: BillsService, private modalService: BsModalService, 
-    private toastr: ToastrService) { }
+  constructor(private billsService: BillsService, private modalService: BsModalService) {
+    this.selectedMonth = new Date().getMonth() + 1;
+    this.selectedYear = new Date().getFullYear();
+  }
 
   ngOnInit(): void {
     this.loadUser();    
@@ -44,7 +49,7 @@ export class BillListComponent implements OnInit {
 
   loadUser() {
     this.username = JSON.parse(localStorage.getItem('user')!).username;
-    this.billsService.getBills(this.username, this.pageNumber, this.pageSize).subscribe(bills => {
+    this.billsService.getBills(this.username, this.selectedMonth, this.selectedYear, this.pageNumber, this.pageSize).subscribe(bills => {
       this.bills = bills.result;
       this.pagination = bills.pagination;
     })
@@ -52,5 +57,14 @@ export class BillListComponent implements OnInit {
 
   delete(bill: Bill) {
     this.billsService.deleteBill(bill).subscribe(_ => this.loadUser());
+  }
+
+  onFilterMonth() {    
+    this.loadUser();
+  }
+
+  onFilterYear() {
+    if (this.selectedYear.toString().length === 4)
+      this.loadUser();
   }
 }

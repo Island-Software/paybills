@@ -42,6 +42,19 @@ namespace API.Controllers
             return Ok(billsToReturn);
         }
 
+        [HttpGet]
+        [Route("name/{username}/{month}/{year}")]
+        public async Task<ActionResult<IEnumerable<BillDto>>> GetBillsByDate(string username, int month, int year, [FromQuery] UserParams userParams)
+        {
+            var bills = await _billsRepository.GetBillsByDateAsync(username, month, year, userParams);
+
+            Response.AddPaginationHeader(bills.CurrentPage, bills.PageSize, bills.TotalCount, bills.TotalPages);
+
+            var billsToReturn = _mapper.Map<IEnumerable<BillDto>>(bills);            
+
+            return Ok(billsToReturn);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBill(int id) => await _billsRepository.GetBillByIdAsync(id);
 

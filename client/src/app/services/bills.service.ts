@@ -15,7 +15,7 @@ export class BillsService {
 
   constructor(private http: HttpClient, private usersService: UsersService) { }
 
-  getBills(username: string, page?: number, itemsPerPage?: number) {    
+  getBills(username: string, month: number, year: number, page?: number, itemsPerPage?: number) {    
     let params = new HttpParams();
 
     if (page !== null && itemsPerPage !== null) {
@@ -23,7 +23,7 @@ export class BillsService {
       params = params.append('pageSize', itemsPerPage!.toString());
     }
 
-    return this.http.get<Bill[]>(this.baseUrl + 'bill/name/' + username, {observe: 'response', params}).pipe(
+    return this.http.get<Bill[]>(this.baseUrl + 'bill/name/' + username + '/' + month + '/' + year, {observe: 'response', params}).pipe(
       map(response => {
         this.paginatedResult.result = response.body!;
         if (response.headers.get('Pagination') !== null) {

@@ -21,10 +21,12 @@ export class BillListComponent implements OnInit {
   months = MONTHS;
   selectedMonth: number;
   selectedYear: number;
+  loading: boolean;
 
   constructor(private billsService: BillsService, private modalService: BsModalService) {
     this.selectedMonth = new Date().getMonth() + 1;
     this.selectedYear = new Date().getFullYear();
+    this.loading = false;
   }
 
   ngOnInit(): void {
@@ -48,10 +50,12 @@ export class BillListComponent implements OnInit {
   }
 
   loadUser() {
-    this.username = JSON.parse(localStorage.getItem('user')!).username;
+    this.loading = true;
+    this.username = JSON.parse(localStorage.getItem('user')!).username;    
     this.billsService.getBills(this.username, this.selectedMonth, this.selectedYear, this.pageNumber, this.pageSize).subscribe(bills => {
       this.bills = bills.result;
       this.pagination = bills.pagination;
+      this.loading = false;
     })
   }
 

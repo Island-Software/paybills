@@ -9,6 +9,7 @@ import { AccountService } from '../../services/account.service';
 })
 export class NavComponent implements OnInit {
   model: any = {}
+  isMenuCollapsed: boolean = true;
 
   constructor(public accountService: AccountService, private router: Router) { }
 
@@ -18,6 +19,7 @@ export class NavComponent implements OnInit {
   login() {
     this.accountService.login(this.model).subscribe(response => {
       this.router.navigateByUrl('/bills');
+      this.closeMenu();
     });
   }
 
@@ -29,4 +31,7 @@ export class NavComponent implements OnInit {
     });    
   }
 
+  closeMenu() {
+    this.isMenuCollapsed = true;
+  }
 }

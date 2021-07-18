@@ -10,7 +10,7 @@ import { NavComponent } from './core/nav/nav.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HomeComponent } from './core/home/home.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './core/register/register.component';
 import { BillTypeDetailComponent } from './bill-type/bill-type-detail/bill-type-detail.component';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './modules/shared.module';
@@ -25,6 +25,7 @@ import { BillTypeListComponent } from './bill-type/bill-type-list/bill-type-list
 import { TextInputComponent } from './forms/text-input/text-input.component';
 import { BillRegisterComponent } from './bill/bill-register/bill-register.component';
 import { BillTypeRegisterComponent } from './bill-type/bill-type-register/bill-type-register.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { BillTypeRegisterComponent } from './bill-type/bill-type-register/bill-t
     FormsModule,
     SharedModule,
     ModalModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

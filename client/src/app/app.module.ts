@@ -26,6 +26,8 @@ import { TextInputComponent } from './forms/text-input/text-input.component';
 import { BillRegisterComponent } from './bill/bill-register/bill-register.component';
 import { BillTypeRegisterComponent } from './bill-type/bill-type-register/bill-type-register.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BillEditComponent } from './bill/bill-edit/bill-edit.component';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   declarations: [
@@ -41,10 +43,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ServerErrorComponent,
     TextInputComponent,
     BillRegisterComponent,
-    BillTypeRegisterComponent
+    BillTypeRegisterComponent,
+    BillEditComponent
   ],
   imports: [
     BrowserModule,
+    NgxCurrencyModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

@@ -15,3 +15,12 @@ export interface NewBillDto {
     typeId: number;
     userId: number;
 }
+
+export interface UpdateBillDto {
+    id: number;
+    value: number;
+    month: number;
+    year: number;
+    typeId: number;
+    userId: number;
+}

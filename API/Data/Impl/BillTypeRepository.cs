@@ -21,7 +21,12 @@ namespace API.Data
 
         public async Task<BillType> GetBillTypeByIdAsync(int id) => await _context.BillTypes.SingleAsync(bt => bt.Id == id);
 
-        public async Task<IEnumerable<BillType>> GetBillTypesAsync() => await _context.BillTypes.ToListAsync();
+        public async Task<IEnumerable<BillType>> GetBillTypesAsync() 
+        {
+            var billTypes = await _context.BillTypes.ToListAsync();
+            
+            return billTypes;
+        } 
 
         public void Update(BillType billType) => _context.Entry(billType).State = EntityState.Modified;
     }

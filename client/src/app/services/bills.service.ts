@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Bill, NewBillDto } from '../models/bill';
+import { Bill, NewBillDto, UpdateBillDto } from '../models/bill';
 import { PaginatedResult } from '../models/pagination';
 import { UsersService } from './users.service';
 
@@ -35,9 +35,12 @@ export class BillsService {
   }
 
   createBill(bill: NewBillDto) {
-    bill.userId = this.usersService.getCurrentUserId();
-    console.log("Bill: " + bill);
+    bill.userId = this.usersService.getCurrentUserId();    
     return this.http.post(this.baseUrl + 'bill/create', bill);
+  }
+
+  updateBill(bill: UpdateBillDto) {
+    return this.http.put(this.baseUrl + 'bill/' + bill.id, bill);
   }
 
   deleteBill(bill: Bill) {

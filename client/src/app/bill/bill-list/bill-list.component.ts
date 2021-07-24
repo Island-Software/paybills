@@ -11,13 +11,13 @@ import { MONTHS } from 'src/app/consts/months';
   styleUrls: ['./bill-list.component.css']
 })
 export class BillListComponent implements OnInit {
-  bills: Bill[] = [];  
+  bills: Bill[] = [];
+  selectedBill?: Bill;
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 5;
   username: string = '';
   modalRef!: BsModalRef;
-  newBill: NewBillDto = { value: 0, month: 0, year: 0, typeId: 0, userId: 0 };
   months = MONTHS;
   selectedMonth: number;
   selectedYear: number;
@@ -36,6 +36,12 @@ export class BillListComponent implements OnInit {
   pageChanged(event: any) {
     this.pageNumber = event.page;
     this.loadUser();
+  }
+
+  openModalForEdit(template: TemplateRef<any>, billToEdit: Bill)
+  {
+    this.selectedBill = billToEdit;    
+    this.modalRef = this.modalService.show(template);
   }
 
   openModal(template: TemplateRef<any>) {    

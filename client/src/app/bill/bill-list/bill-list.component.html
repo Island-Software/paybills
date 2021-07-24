@@ -35,7 +35,10 @@
         <tr *ngFor="let bill of bills">
           <td>{{bill.billType.description}}</td>
           <td>{{bill.value | currency:"R$ "}}</td>
-          <td><button class="btn btn-danger" (click)="delete(bill)">Delete</button></td>
+          <td>
+            <button class="btn btn-primary mr-2" (click)="openModalForEdit(billEdit, bill)">Edit</button>
+            <button class="btn btn-danger" (click)="delete(bill)">Delete</button>
+          </td>
         </tr>
       </tbody>
       
@@ -67,6 +70,11 @@
     </pagination>
   </div>
 </div>
+
 <ng-template #billAdd>
   <app-bill-register (saveBillEvent)="closeModal($event)"></app-bill-register>
+</ng-template>
+
+<ng-template #billEdit>
+  <app-bill-edit [bill]="selectedBill" (saveBillEvent)="closeModal($event)"></app-bill-edit>
 </ng-template>

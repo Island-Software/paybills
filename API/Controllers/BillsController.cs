@@ -16,13 +16,13 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     [Authorize]
-    public class BillController : BaseApiController
+    public class BillsController : BaseApiController
     {
         private readonly IBillRepository _billsRepository;
         private readonly IBillTypeRepository _billTypesRepository;
         private readonly IMapper _mapper;
 
-        public BillController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper)
+        public BillsController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper)
         {
             this._mapper = mapper;
             this._billsRepository = billsRepository;
@@ -110,6 +110,18 @@ namespace API.Controllers
 
             await _billsRepository.SaveAllAsync();
 
+            return Ok();
+        }
+
+        [HttpPost("copy")]
+        public async Task<ActionResult> CopyBillsToNextMonth(PeriodDataDto periodData)
+        {
+            var bills = await _billsRepository.CopyBillsToNextMonth(periodData.UserId, periodData.Month, periodData.Year);
+
+            // await _billsRepository.AddBillsToUser(periodData.UserId, bills);
+
+            // await _billsRepository.SaveAllAsync();
+            
             return Ok();
         }
 

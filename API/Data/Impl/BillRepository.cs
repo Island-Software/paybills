@@ -28,6 +28,17 @@ namespace API.Data
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         } 
 
+        public async Task<List<Bill>> GetBillsAsync(int userId)
+        {
+            var bills =  _context.Bills
+                .Include(b => b.BillType)
+                .Where(b => b.Users.Count(u => u.Id == userId) > 0)
+                .OrderBy(b => b.Id)                
+                .AsNoTracking();
+
+            return await bills.ToListAsync();
+        }
+
         public async Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams)
         {
             var query =  _context.Bills
@@ -58,6 +69,48 @@ namespace API.Data
             return true;
         }
 
-        
+        public async Task<bool> AddBillsToUser(int userId, IEnumerable<Bill> bills)
+        {
+            var user = await _context.Users
+                .Include(u => u.Bills)
+                .SingleAsync(u => u.Id == userId);
+
+            foreach (var bill in bills)
+            {
+                user.Bills.Add(bill);
+            }            
+
+            return true;
+        }
+
+        public async Task<IEnumerable<Bill>> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
+        {
+            var bills = await GetBillsAsync(userId);
+
+            foreach (var bill in bills)
+            {
+                _context.Entry(bill.BillType).State = EntityState.Unchanged;
+
+                if (bill.Month == 12)
+                {
+                    bill.Month = 1;
+                    bill.Year += 1;
+                }
+                else
+                {
+                    bill.Month += 1;
+                }              
+
+                bill.Id = 0;
+                bill.Value = 0;
+                Create(bill);                  
+
+                await _context.SaveChangesAsync();                         
+            }   
+            await AddBillsToUser(userId, bills);
+            await SaveAllAsync();            
+
+            return bills;
+        }
     }
 }

@@ -16,10 +16,13 @@
         <div *ngFor="let billType of billTypes">
           <div class="d-flex flex-row-reverse bd-highlight mt-1">
             <span class="border border-white border-5">
-            <button type="button" class="btn btn-danger" (click)="deleteBillType(billType)">Delete</button>
+            <button type="button" class="btn btn-grid btn-danger" (click)="deleteBillType(billType)">Delete</button>
           </span>
             <button type="button" class="list-group-item list-group-item-action" (click)="onSelect(billType)">{{billType.description}}</button>        
           </div>
+        </div>
+        <div *ngIf="loading" class="spinner-border text-primary ml-2" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
       </div>
 

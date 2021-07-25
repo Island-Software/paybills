@@ -3,3 +3,7 @@
     border-radius: 6px;
     min-width: 100px;
 }
+
+.btn-grid { 
+    min-width: 70px;
+}

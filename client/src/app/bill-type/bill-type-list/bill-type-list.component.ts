@@ -15,10 +15,13 @@ export class BillTypeListComponent implements OnInit {
   searchText: string = "";
   selectedBillType?: BillType;
   modalRef!: BsModalRef;
+  loading: boolean;
   
   constructor(private billTypeService: BillTypesService, 
     private modalService: BsModalService,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService) { 
+      this.loading = false;
+    }
 
   onSelect(billType: BillType): void {
     this.selectedBillType = billType;
@@ -52,10 +55,12 @@ export class BillTypeListComponent implements OnInit {
   }
 
   loadBillTypes() {
+    this.loading = true;
     this.billTypeService.getBillTypes()
       .subscribe(bts => {
         this.billTypes = bts;
         this.originalBillTypes = bts;
+        this.loading = false;
       });
   }
 

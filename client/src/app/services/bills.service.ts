@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Bill, NewBillDto, UpdateBillDto } from '../models/bill';
+import { Bill, CopyBillDto, NewBillDto, UpdateBillDto } from '../models/bill';
 import { PaginatedResult } from '../models/pagination';
 import { UsersService } from './users.service';
 
@@ -23,7 +23,7 @@ export class BillsService {
       params = params.append('pageSize', itemsPerPage!.toString());
     }
 
-    return this.http.get<Bill[]>(this.baseUrl + 'bill/name/' + username + '/' + month + '/' + year, {observe: 'response', params}).pipe(
+    return this.http.get<Bill[]>(this.baseUrl + 'bills/name/' + username + '/' + month + '/' + year, {observe: 'response', params}).pipe(
       map(response => {
         this.paginatedResult.result = response.body!;
         if (response.headers.get('Pagination') !== null) {
@@ -36,14 +36,21 @@ export class BillsService {
 
   createBill(bill: NewBillDto) {
     bill.userId = this.usersService.getCurrentUserId();    
-    return this.http.post(this.baseUrl + 'bill/create', bill);
+    return this.http.post(this.baseUrl + 'bills/create', bill);
   }
 
   updateBill(bill: UpdateBillDto) {
-    return this.http.put(this.baseUrl + 'bill/' + bill.id, bill);
+    return this.http.put(this.baseUrl + 'bills/' + bill.id, bill);
   }
 
   deleteBill(bill: Bill) {
-    return this.http.delete(this.baseUrl + 'bill/' + bill.id);
+    return this.http.delete(this.baseUrl + 'bills/' + bill.id);
   }  
+
+  copyBills(currentMonth: number, currentYear: number)
+  {
+    let copyBillDTO: CopyBillDto = { 
+      userId: this.usersService.getCurrentUserId(), currentMonth: currentMonth, currentYear: currentYear };
+    return this.http.post(this.baseUrl + 'bills/copy', copyBillDTO);
+  }
 }

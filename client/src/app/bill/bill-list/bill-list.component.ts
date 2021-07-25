@@ -4,6 +4,7 @@ import { Pagination } from '../../models/pagination';
 import { BillsService } from '../../services/bills.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { MONTHS } from 'src/app/consts/months';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-bill-list',
@@ -23,7 +24,8 @@ export class BillListComponent implements OnInit {
   selectedYear: number;
   loading: boolean;
 
-  constructor(private billsService: BillsService, private modalService: BsModalService) {
+  constructor(private billsService: BillsService, private modalService: BsModalService,
+      private toastrServie: ToastrService) {
     this.selectedMonth = new Date().getMonth() + 1;
     this.selectedYear = new Date().getFullYear();
     this.loading = false;
@@ -76,5 +78,11 @@ export class BillListComponent implements OnInit {
   onFilterYear() {
     if (this.selectedYear.toString().length === 4)
       this.loadUser();
+  }
+
+  copyBills() {
+    this.billsService.copyBills(this.selectedMonth, this.selectedYear).subscribe( _ => {
+      this.toastrServie.success("Bills copied successfuly");
+    });
   }
 }

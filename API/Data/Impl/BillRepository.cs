@@ -83,7 +83,7 @@ namespace API.Data
             return true;
         }
 
-        public async Task<IEnumerable<Bill>> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
+        public async Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
         {
             var bills = await GetBillsAsync(userId);
 
@@ -108,9 +108,8 @@ namespace API.Data
                 await _context.SaveChangesAsync();                         
             }   
             await AddBillsToUser(userId, bills);
-            await SaveAllAsync();            
 
-            return bills;
+            return true;
         }
     }
 }

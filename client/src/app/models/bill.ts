@@ -24,3 +24,9 @@ export interface UpdateBillDto {
     typeId: number;
     userId: number;
 }
+
+export interface CopyBillDto {
+    userId: number;
+    currentMonth: number;
+    currentYear: number;
+}

@@ -39,6 +39,17 @@ namespace API.Data
             return await bills.ToListAsync();
         }
 
+        private async Task<List<Bill>> GetBillsAsync(int userId, int currentMonth, int currentYear)
+        {
+            var bills =  _context.Bills
+                .Include(b => b.BillType)
+                .Where(b => b.Users.Count(u => u.Id == userId) > 0 && b.Month == currentMonth && b.Year == currentYear)
+                .OrderBy(b => b.Id)                
+                .AsNoTracking();
+
+            return await bills.ToListAsync();
+        }
+
         public async Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams)
         {
             var query =  _context.Bills
@@ -85,7 +96,7 @@ namespace API.Data
 
         public async Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
         {
-            var bills = await GetBillsAsync(userId);
+            var bills = await GetBillsAsync(userId, currentMonth, currentYear);
 
             foreach (var bill in bills)
             {

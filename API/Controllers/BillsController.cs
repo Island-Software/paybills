@@ -116,7 +116,7 @@ namespace API.Controllers
         [HttpPost("copy")]
         public async Task<ActionResult> CopyBillsToNextMonth(PeriodDataDto periodData)
         {
-            var bills = await _billsRepository.CopyBillsToNextMonth(periodData.UserId, periodData.Month, periodData.Year);            
+            var bills = await _billsRepository.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear);            
 
             await _billsRepository.SaveAllAsync();
             

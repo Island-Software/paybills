@@ -51,6 +51,7 @@ export class BillsService {
   {
     let copyBillDTO: CopyBillDto = { 
       userId: this.usersService.getCurrentUserId(), currentMonth: currentMonth, currentYear: currentYear };
+    console.log(copyBillDTO);
     return this.http.post(this.baseUrl + 'bills/copy', copyBillDTO);
   }
 }

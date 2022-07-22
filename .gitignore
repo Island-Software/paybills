@@ -451,3 +451,7 @@ appsettings.json
 appsettings.Development.json
 UsersSeedData.json
 UsersPassword.json
+
+coverage/
+scripts/
+.env

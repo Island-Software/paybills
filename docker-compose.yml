@@ -1,0 +1,30 @@
+services:
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: pbuser
+  #     POSTGRES_PASSWORD: caneta2103
+  #     POSTGRES_DB: pbuser
+  #   networks:
+  #     - paybills-network
+
+  paybills-api:
+    # depends_on: [db]
+    image : paybills-api:latest
+    ports:
+      - 5001:80
+    networks:
+      - paybills-network
+    environment:
+      - TOKEN_KEY=$TOKEN_KEY
+      - ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
+      - PG_HOST=$PG_HOST
+      - PG_PORT=$PG_PORT
+      - PG_USER=$PG_USER
+      - PG_PASSWORD=$PG_PASSWORD
+      - PG_DB=$PG_DB
+
+networks:
+  paybills-network:
+    driver: bridge

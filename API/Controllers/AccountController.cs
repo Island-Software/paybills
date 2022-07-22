@@ -6,12 +6,10 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 namespace API.Controllers
 {
@@ -38,9 +36,6 @@ namespace API.Controllers
             if (await UserExists(registerDto.UserName)) 
                 return BadRequest("Username already exists");
 
-            if ((!_env.IsDevelopment()) && (_config["allowNewUsers"] != "TRUE"))
-                return BadRequest("Creation of new users is disabled");
-
             using var hmac = new HMACSHA512();
 
             var user = new AppUser
@@ -56,7 +51,8 @@ namespace API.Controllers
             return new LoginResultDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                UserId = user.Id
             };
         }
 

@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/microsoft-dotnet
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 # copy csproj and restore as distinct layers
@@ -14,7 +14,7 @@ COPY API/. ./
 RUN dotnet publish -c Release -o out
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build /app/out .
 EXPOSE 80

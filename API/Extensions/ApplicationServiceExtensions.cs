@@ -33,18 +33,6 @@ namespace API.Extensions
                 }
                 else
                 {
-                    // var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-                    // connUrl = connUrl.Replace("postgres://", string.Empty);
-                    // var pgUserPass = connUrl.Split("@")[0];
-                    // var pgHostPortDb = connUrl.Split("@")[1];
-                    // var pgHostPort = pgHostPortDb.Split("/")[0];
-                    // var pgDb = pgHostPortDb.Split("/")[1];
-                    // var pgUser = pgUserPass.Split(":")[0];
-                    // var pgPass = pgUserPass.Split(":")[1];
-                    // var pgHost = pgHostPort.Split(":")[0];
-                    // var pgPort = pgHostPort.Split(":")[1];
-
                     var pgHost = Environment.GetEnvironmentVariable("PG_HOST");
                     var pgPort = Environment.GetEnvironmentVariable("PG_PORT");
                     var pgUser = Environment.GetEnvironmentVariable("PG_USER");
@@ -55,7 +43,6 @@ namespace API.Extensions
                 }
 
                 opt.UseNpgsql(connStr);
-                // opt.UseSqlite(_config["DefaultConnection"]);
             });
 
             services.AddSwaggerGen(c =>

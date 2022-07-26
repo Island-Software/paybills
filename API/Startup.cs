@@ -35,29 +35,32 @@ namespace API
 
             app.UseMiddleware<ExceptionMiddleware>();
 
-            if (env.IsProduction())
+            // if (env.IsProduction())
                 app.UseHttpsRedirection();                    
 
             app.UseRouting();
 
-            if (env.IsDevelopment())
-                app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseCors(x => x.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .WithOrigins("https://localhost:4200"));
+
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            if (env.IsProduction())
-            {
+            // if (env.IsProduction())
+            // {
                 app.UseDefaultFiles();
                 app.UseStaticFiles();
-            }            
+            // }            
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                if (env.IsProduction())
+                // if (env.IsProduction())
                     endpoints.MapFallbackToController("Index", "Fallback");
             });
         }

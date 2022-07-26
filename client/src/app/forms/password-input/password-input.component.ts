@@ -2,13 +2,13 @@ import { Component, Input, Self } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-text-input',
-  templateUrl: './text-input.component.html',
-  styleUrls: ['./text-input.component.css']
+  selector: 'app-password-input',
+  templateUrl: './password-input.component.html',
+  styleUrls: ['./password-input.component.css']
 })
-export class TextInputComponent implements ControlValueAccessor {
+export class PasswordInputComponent implements ControlValueAccessor {
   @Input() label = '';
-  @Input() type = 'text';
+  @Input() type = 'password';
 
   constructor(@Self() public ngControl: NgControl) { 
     this.ngControl.valueAccessor = this;

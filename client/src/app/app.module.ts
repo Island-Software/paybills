@@ -28,6 +28,7 @@ import { BillTypeRegisterComponent } from './bill-type/bill-type-register/bill-t
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BillEditComponent } from './bill/bill-edit/bill-edit.component';
 import { NgxCurrencyModule } from 'ngx-currency';
+import { PasswordInputComponent } from './forms/password-input/password-input.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { NgxCurrencyModule } from 'ngx-currency';
     TextInputComponent,
     BillRegisterComponent,
     BillTypeRegisterComponent,
-    BillEditComponent
+    BillEditComponent,
+    PasswordInputComponent
   ],
   imports: [
     BrowserModule,

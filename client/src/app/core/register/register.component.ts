@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../../services/account.service';
 
@@ -13,10 +14,20 @@ export class RegisterComponent implements OnInit {
   // Property to send data to parent component
   @Output() cancelRegister = new EventEmitter();
   model: any = {};
+  newUserForm!: FormGroup;
 
-  constructor(private accountService: AccountService, private toastr: ToastrService) { }
+  constructor(private accountService: AccountService, 
+    private toastrService: ToastrService) { }
 
   ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  initializeForm() {
+    this.newUserForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(8)])
+    })
   }
 
   onUserText() {
@@ -28,11 +39,10 @@ export class RegisterComponent implements OnInit {
   // }
 
   register() {
-    this.accountService.register(this.model).subscribe(response => {      
+    this.accountService.register(this.newUserForm.value).subscribe(response => {      
       this.cancel();
     }, error => {
-      console.log(error);
-      this.toastr.error(error.error);
+      console.log(error.error);
     });
   }
 

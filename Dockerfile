@@ -1,21 +1,15 @@
-# https://hub.docker.com/_/microsoft-dotnet
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Build Stage
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+WORKDIR /source
+COPY /API .
+RUN dotnet restore "./API.csproj" --disable-parallel
+RUN dotnet publish "./API.csproj" -c release -o /app --no-restore
+
+# Serve Stage
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal
 WORKDIR /app
+COPY --from=build /app ./
 
-# copy csproj and restore as distinct layers
-# COPY *.sln .
-COPY API/*.csproj ./
-# COPY API.Tests/*.csproj ./API.Tests/
-RUN dotnet restore
+EXPOSE 5000
 
-# copy everything else and build app
-COPY API/. ./
-# COPY API.Tests/. ./API.Tests/
-RUN dotnet publish -c Release -o out
-
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-WORKDIR /app
-COPY --from=build /app/out .
-EXPOSE 80
-ENTRYPOINT ["dotnet", "API.dll"]
+ENTRYPOINT [ "dotnet", "API.dll" ]

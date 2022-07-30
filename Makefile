@@ -17,7 +17,7 @@ docker-run:
 	docker compose up
 
 run:
-	dotnet run --project API/API.csproj
+	dotnet run --project Paybills.API/Paybills.API.csproj
 
 test:
 	dotnet test --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=lcov

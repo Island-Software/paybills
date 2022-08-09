@@ -13,7 +13,7 @@ services:
     # depends_on: [db]
     image : paybills-api:latest
     ports:
-      - 5001:80
+      - 5001:5001
     networks:
       - paybills-network
     environment:
@@ -24,6 +24,8 @@ services:
       - PG_USER=$PG_USER
       - PG_PASSWORD=$PG_PASSWORD
       - PG_DB=$PG_DB
+      # - ASPNETCORE_HTTP_PORT=http://+:5001
+      - ASPNETCORE_URLS=http://+:5001
 
 networks:
   paybills-network:

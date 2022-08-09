@@ -61,4 +61,14 @@ static class ModelUtils
     }
     #endregion
 
+    #region BillType
+    public static BillType GenerateRandomBillType()
+    {
+        return new BillType {
+            Id = DataUtils.RandomInt(1, 50),
+            Description = DataUtils.RandomString(50),
+            Active = true
+        };
+    }
+    #endregion
 }

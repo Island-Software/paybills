@@ -51,7 +51,7 @@ namespace Paybills.API
                 endpoints.MapControllers();
             });
 
-            app.UseHealthChecks("/health");
+            app.UseHealthChecks("/api/health");
         }
     }
 }

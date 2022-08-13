@@ -52,7 +52,11 @@ namespace Paybills.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bill>> GetBill(int id) => await _billsRepository.GetBillByIdAsync(id);
+        public async Task<ActionResult<Bill>> GetBill(int id)
+        {
+            var result = await _billsRepository.GetBillByIdAsync(id);
+            return Ok(result);
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
@@ -88,7 +92,8 @@ namespace Paybills.API.Controllers
             await _billsRepository.SaveAllAsync();
 
             var billToReturn = _mapper.Map<BillDto>(newBill);
-            return billToReturn;
+
+            return CreatedAtAction(nameof(GetBill), new { id = billToReturn.Id }, billToReturn);
         }
 
         [HttpPut("{id}")]

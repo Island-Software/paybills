@@ -81,7 +81,26 @@ namespace Paybills.UnitTests.Controllers
         }
 
         [Fact]
-        public async void UpdateBillMustSucceed()
+        public async void GetBill_MustSucceed()
+        {
+            // Given
+            var billId = DataUtils.RandomInt(1, 100);
+            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
+            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IMapper> mockMapper = new Mock<IMapper>();
+
+            var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object);
+            
+            // When
+            var result = await controller.GetBill(billId);
+        
+            // Then
+            mockBillRepo.Verify(m => m.GetBillByIdAsync(billId));
+            result.Result.Should().BeOfType<OkObjectResult>().Which.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async void UpdateBill_MustSucceed()
         {
             // Given
             Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
@@ -125,7 +144,7 @@ namespace Paybills.UnitTests.Controllers
         }
 
         [Fact]
-        public async void DeleteInexistentBillShouldReturnNotFound()
+        public async void DeleteInexistentBill_ShouldReturnNotFound()
         {
             // Given
             Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
@@ -144,6 +163,46 @@ namespace Paybills.UnitTests.Controllers
             mockBillRepo.Verify(m => m.Delete(It.IsAny<Bill>()), Times.Never);
             mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Never);
             Assert.True(result is NotFoundResult);
+        }
+
+        [Fact]
+        public async void CreateBill_MustSucceed()
+        {
+            // Given
+            var billRegDto = new BillRegisterDto() { TypeId = DataUtils.RandomInt(1, 50)};
+            var billType = ModelUtils.GenerateRandomBillType();
+            Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
+            Mock<IBillTypeRepository> mockBillTypeRepo = new Moq.Mock<IBillTypeRepository>();
+            Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
+
+            var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object);
+
+            mockBillTypeRepo.Setup(m => m.GetBillTypeByIdAsync(billRegDto.TypeId)).Returns(Task.FromResult(billType));
+
+            // When
+            var result = await controller.Create(billRegDto);
+        
+            // Then
+            mockBillTypeRepo.Verify(m => m.GetBillTypeByIdAsync(billRegDto.TypeId), Times.Once);
+            mockBillRepo.Verify(m => m.Create(It.IsAny<Bill>()));
+        }
+
+        [Fact]
+        public async void CopyBillsToNextMonth_MustSucceed()
+        {
+            // Given
+            Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
+            Mock<IBillTypeRepository> mockBillTypeRepo = new Moq.Mock<IBillTypeRepository>();
+            Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
+            var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object);
+            var periodData = new PeriodDataDto() { UserId = 1, CurrentMonth = 8, CurrentYear = 2022 };
+            
+            // When
+            var result = await controller.CopyBillsToNextMonth(periodData);
+            
+            // Then
+            mockBillRepo.Verify(m => m.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear), Times.Once);
+            mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
         }
     }
 }

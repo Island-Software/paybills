@@ -19,7 +19,7 @@ namespace Paybills.API.Data
 
         public async Task<IEnumerable<BillType>> GetBillTypeByDescription(string description) => await _context.BillTypes.Where(bt => bt.Description == description).ToListAsync();
 
-        public async Task<BillType> GetBillTypeByIdAsync(int id) => await _context.BillTypes.SingleAsync(bt => bt.Id == id);
+        public async Task<BillType> GetBillTypeByIdAsync(int id) => await _context.BillTypes.SingleOrDefaultAsync(bt => bt.Id == id);
 
         public async Task<IEnumerable<BillType>> GetBillTypesAsync() 
         {

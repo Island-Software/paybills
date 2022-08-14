@@ -170,7 +170,8 @@ namespace Paybills.UnitTests.Controllers
         {
             // Given
             var billRegDto = new BillRegisterDto() { TypeId = DataUtils.RandomInt(1, 50)};
-            var billType = ModelUtils.GenerateRandomBillType();
+            var billType = ModelUtils.GenerateRandomBillType();            
+            var createdBill = ModelUtils.GenerateRandomBillDto();
             Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
             Mock<IBillTypeRepository> mockBillTypeRepo = new Moq.Mock<IBillTypeRepository>();
             Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
@@ -178,6 +179,7 @@ namespace Paybills.UnitTests.Controllers
             var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object);
 
             mockBillTypeRepo.Setup(m => m.GetBillTypeByIdAsync(billRegDto.TypeId)).Returns(Task.FromResult(billType));
+            mockMapper.Setup(m => m.Map<BillDto>(It.IsAny<Bill>())).Returns(createdBill);
 
             // When
             var result = await controller.Create(billRegDto);

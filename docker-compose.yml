@@ -41,7 +41,8 @@ services:
       - paybills-network
 
   paybills-api:
-    depends_on: [db]
+    depends_on: 
+      - db
     image : paybills-api:latest
     ports:
       - 80:80

@@ -17,8 +17,8 @@ namespace Paybills.API.Controllers
 
         public BillTypeController(IBillTypeRepository repository, IMapper mapper)
         {
-            this._repository = repository;
-            this._mapper = mapper;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpPost("create")]

@@ -16,8 +16,8 @@ namespace Paybills.API.Controllers
 
         public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            this._mapper = mapper;
-            this._userRepository = userRepository;
+            _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         [HttpGet]

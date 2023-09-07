@@ -5,9 +5,7 @@ using Paybills.API.DTOs;
 using Paybills.API.Entities;
 using Paybills.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace Paybills.API.Controllers
 {
@@ -18,8 +16,8 @@ namespace Paybills.API.Controllers
 
         public AccountController(IUserRepository userRepository, ITokenService tokenService)
         {
-            this._tokenService = tokenService;
-            this._userRepository = userRepository;
+            _tokenService = tokenService;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]

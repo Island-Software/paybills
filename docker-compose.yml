@@ -16,7 +16,7 @@ services:
 
   kibana:
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.13.4-arm64
+    image: docker.elastic.co/kibana/kibana:7.13.4
     ports:
       - 5601:5601
     depends_on:
@@ -29,6 +29,8 @@ services:
   db:
     image: postgres
     restart: always
+    ports:
+      - 5432:5432
     command: >
       -c ssl=on
       -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
@@ -40,22 +42,22 @@ services:
     networks:
       - paybills-network
 
-  paybills-api:
-    depends_on: 
-      - db
-    image : paybills-api:latest
-    ports:
-      - 80:80
-    networks:
-      - paybills-network
-    environment:
-      - TOKEN_KEY=$TOKEN_KEY
-      - ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
-      - PG_HOST=db
-      - PG_PORT=$PG_PORT
-      - PG_USER=$PG_USER
-      - PG_PASSWORD=$PG_PASSWORD
-      - PG_DB=$PG_DB
+  # paybills-api:
+  #   depends_on: 
+  #     - db
+  #   image : paybills-api:latest
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - paybills-network
+  #   environment:
+  #     - TOKEN_KEY=$TOKEN_KEY
+  #     - ASPNETCORE_ENVIRONMENT=$ASPNETCORE_ENVIRONMENT
+  #     - PG_HOST=db
+  #     - PG_PORT=$PG_PORT
+  #     - PG_USER=$PG_USER
+  #     - PG_PASSWORD=$PG_PASSWORD
+  #     - PG_DB=$PG_DB
       # - ASPNETCORE_HTTP_PORT=http://+:5001
       # - ASPNETCORE_URLS=http://+:5001
 

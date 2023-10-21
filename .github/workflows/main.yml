@@ -1,8 +1,6 @@
 name: .NET deploy
 
-on:
-  push:
-    branches: [ "main" ]
+on:  
   workflow_dispatch:
 
 jobs:
@@ -14,4 +12,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -C Release ../../paybills-API
+      run: dotnet build --no-restore -c Release ../../paybills-API

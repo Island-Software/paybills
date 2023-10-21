@@ -16,7 +16,7 @@ namespace Paybills.API
     {
         public static async Task Main(string[] args)
         {
-            ConfigureLogging();
+            // ConfigureLogging();
 
             var host = CreateHostBuilder(args).Build();
 

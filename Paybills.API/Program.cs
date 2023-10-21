@@ -69,7 +69,7 @@ namespace Paybills.API
                 {
                     // webBuilder.UseUrls("https://localhost:5001");
                     webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog();
+                });
+                // .UseSerilog();
     }
 }

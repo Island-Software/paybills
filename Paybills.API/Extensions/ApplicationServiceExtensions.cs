@@ -27,12 +27,12 @@ namespace Paybills.API.Extensions
 
                 string connStr;
 
-                if (env == "Development")
-                {
-                    connStr = configuration.GetConnectionString("DefaultConnection");
-                }
-                else
-                {
+                // if (env == "Development")
+                // {
+                //     connStr = configuration.GetConnectionString("DefaultConnection");
+                // }
+                // else
+                // {
                     var pgHost = Environment.GetEnvironmentVariable("PG_HOST");
                     var pgPort = Environment.GetEnvironmentVariable("PG_PORT");
                     var pgUser = Environment.GetEnvironmentVariable("PG_USER");
@@ -40,7 +40,7 @@ namespace Paybills.API.Extensions
                     var pgDb = Environment.GetEnvironmentVariable("PG_DB");
 
                     connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPassword};Database={pgDb};SSL Mode=Require;TrustServerCertificate=True";
-                }
+                // }
 
                 opt.UseNpgsql(connStr);
             });

@@ -12,4 +12,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -c Release ../../paybills-API
+      run: dotnet build .\Paybills.API\Paybills.API.csproj --no-restore -c Release ../../paybills-API

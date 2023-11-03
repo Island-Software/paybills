@@ -11,5 +11,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: Restore dependencies
       run: dotnet restore
+    - name: Stop API service
+      run: sudo systemctl stop kestrel-paybills.service
     - name: Build
       run: dotnet build Paybills.API/Paybills.API.csproj --no-restore -c Release --output /var/www/paybills
+    - name: Start API service
+      run: sudo systemctl start kestrel-paybills.service

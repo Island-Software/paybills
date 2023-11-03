@@ -10,7 +10,14 @@ namespace Paybills.API.Data
 {
     public class BillRepository : RepositoryBase, IBillRepository
     {
-        public BillRepository(DataContext context) : base(context) { }
+        private IBillTypeRepository _billTypeRepository { get; }
+        public BillRepository(DataContext context, IBillTypeRepository billTypeRepository) : base(context)
+        {
+            _billTypeRepository = billTypeRepository;
+        }
+
+
+
 
         public void Create(Bill bill) => _context.Bills.Add(bill);
 
@@ -18,22 +25,22 @@ namespace Paybills.API.Data
 
         public async Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams)
         {
-            var query =  _context.Bills
+            var query = _context.Bills
                 .Include(b => b.BillType)
                 .Include(b => b.Users)
                 .Where(b => b.Users.Count(u => u.UserName == username) > 0)
-                .OrderBy(b => b.Id)                
-                .AsNoTracking();     
+                .OrderBy(b => b.Id)
+                .AsNoTracking();
 
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
-        } 
+        }
 
         public async Task<List<Bill>> GetBillsAsync(int userId)
         {
-            var bills =  _context.Bills
+            var bills = _context.Bills
                 .Include(b => b.BillType)
                 .Where(b => b.Users.Count(u => u.Id == userId) > 0)
-                .OrderBy(b => b.Id)                
+                .OrderBy(b => b.Id)
                 .AsNoTracking();
 
             return await bills.ToListAsync();
@@ -41,10 +48,10 @@ namespace Paybills.API.Data
 
         private async Task<List<Bill>> GetBillsAsync(int userId, int currentMonth, int currentYear)
         {
-            var bills =  _context.Bills
-                .Include(b => b.BillType)
+            var bills = _context.Bills
+                .Include(b => b.BillType).AsNoTrackingWithIdentityResolution()
                 .Where(b => b.Users.Count(u => u.Id == userId) > 0 && b.Month == currentMonth && b.Year == currentYear)
-                .OrderBy(b => b.Id)                
+                .OrderBy(b => b.Id)
                 .AsNoTracking();
 
             return await bills.ToListAsync();
@@ -52,12 +59,12 @@ namespace Paybills.API.Data
 
         public async Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams)
         {
-            var query =  _context.Bills
+            var query = _context.Bills
                 .Include(b => b.BillType)
                 .Include(b => b.Users)
                 .Where(b => b.Users.Count(u => u.UserName == username) > 0 && b.Month == month && b.Year == year)
-                .OrderBy(b => b.Id)                
-                .AsNoTracking();     
+                .OrderBy(b => b.Id)
+                .AsNoTracking();
 
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }
@@ -89,7 +96,7 @@ namespace Paybills.API.Data
             foreach (var bill in bills)
             {
                 user.Bills.Add(bill);
-            }            
+            }
 
             return true;
         }
@@ -97,28 +104,34 @@ namespace Paybills.API.Data
         public async Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
         {
             var bills = await GetBillsAsync(userId, currentMonth, currentYear);
+            var newBills = new List<Bill>();
 
             foreach (var bill in bills)
             {
-                _context.Entry(bill.BillType).State = EntityState.Unchanged;
+                // _context.Entry(bill.BillType).State = EntityState.Unchanged;
 
+                var newBill = new Bill();
+                var billType = await _billTypeRepository.GetBillTypeByIdAsync(bill.BillType.Id);
+                newBill.BillType = billType;
+                newBill.Month = bill.Month;
+                newBill.Year = bill.Year;
                 if (bill.Month == 12)
                 {
-                    bill.Month = 1;
-                    bill.Year += 1;
+                    newBill.Month = 1;
+                    newBill.Year += 1;
                 }
                 else
                 {
-                    bill.Month += 1;
-                }              
+                    newBill.Month += 1;
+                }
 
-                bill.Id = 0;
-                bill.Value = 0;
-                Create(bill);                  
+                Create(newBill);
 
-                await _context.SaveChangesAsync();                         
-            }   
-            await AddBillsToUser(userId, bills);
+                await SaveAllAsync();
+
+                newBills.Add(newBill);
+            }
+            await AddBillsToUser(userId, newBills);
 
             return true;
         }

@@ -83,7 +83,8 @@ namespace Paybills.API.Controllers
                 BillType = billType,
                 Month = bill.Month,
                 Year = bill.Year,
-                Value = bill.Value
+                Value = bill.Value,
+                DueDate = bill.DueDate
             };
 
             _billsRepository.Create(newBill);
@@ -107,6 +108,7 @@ namespace Paybills.API.Controllers
             // TO-DO: add automapper to project
             repoBill.Value = bill.Value;
             repoBill.Month = bill.Month;
+            repoBill.DueDate = bill.DueDate;
             repoBill.Year = bill.Year;
 
             await _billsRepository.SaveAllAsync();

@@ -1,3 +1,5 @@
+using System;
+
 namespace Paybills.API.DTOs
 {
     public class BillDto
@@ -7,6 +9,7 @@ namespace Paybills.API.DTOs
         public float Value { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public DateTime? DueDate { get; set; }
         public string[] UserName { get; set; }
     }
 }

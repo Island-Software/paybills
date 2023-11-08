@@ -2,6 +2,7 @@ using System.Linq;
 using Paybills.API.DTOs;
 using Paybills.API.Entities;
 using AutoMapper;
+using System;
 
 namespace Paybills.API.Helpers
 {

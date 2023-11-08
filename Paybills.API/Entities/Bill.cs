@@ -12,6 +12,8 @@ namespace Paybills.API.Entities
         public float Value { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public DateTime? DueDate { get; set; }
+        public bool Paid { get; set; }
         public ICollection<AppUser> Users { get; set; }
     }
 }

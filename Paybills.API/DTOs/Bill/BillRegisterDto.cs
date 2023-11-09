@@ -11,8 +11,9 @@ namespace Paybills.API.DTOs
         [Required]
         public int Month { get; set; }
         [Required]
-        public int Year { get; set; }        
+        public int Year { get; set; }
         public DateTime? DueDate { get; set; }
+        public bool Paid { get; set; }
         [Required]
         public int UserId { get; set; }
     }

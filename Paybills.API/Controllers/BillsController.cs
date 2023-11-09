@@ -84,7 +84,8 @@ namespace Paybills.API.Controllers
                 Month = bill.Month,
                 Year = bill.Year,
                 Value = bill.Value,
-                DueDate = bill.DueDate
+                DueDate = bill.DueDate,
+                Paid = bill.Paid
             };
 
             _billsRepository.Create(newBill);
@@ -110,6 +111,7 @@ namespace Paybills.API.Controllers
             repoBill.Month = bill.Month;
             repoBill.DueDate = bill.DueDate;
             repoBill.Year = bill.Year;
+            repoBill.Paid = bill.Paid;
 
             await _billsRepository.SaveAllAsync();
 

@@ -16,9 +16,6 @@ namespace Paybills.API.Data
             _billTypeRepository = billTypeRepository;
         }
 
-
-
-
         public void Create(Bill bill) => _context.Bills.Add(bill);
 
         public void Delete(Bill bill) => _context.Bills.Remove(bill);

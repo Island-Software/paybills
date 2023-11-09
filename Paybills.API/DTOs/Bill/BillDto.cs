@@ -10,6 +10,7 @@ namespace Paybills.API.DTOs
         public int Month { get; set; }
         public int Year { get; set; }
         public DateTime? DueDate { get; set; }
+        public bool Paid { get; set; }
         public string[] UserName { get; set; }
     }
 }

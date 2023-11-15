@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Amazon.SimpleEmail;
 
 namespace Paybills.API.Extensions
 {
@@ -14,11 +15,13 @@ namespace Paybills.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAWSService<IAmazonSimpleEmailService>()
+                    .AddTransient<SESService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillTypeRepository, BillTypeRepository>();
-            
+
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             services.AddDbContext<DataContext>(opt =>
@@ -27,20 +30,13 @@ namespace Paybills.API.Extensions
 
                 string connStr;
 
-                // if (env == "Development")
-                // {
-                //     connStr = configuration.GetConnectionString("DefaultConnection");
-                // }
-                // else
-                // {
-                    var pgHost = Environment.GetEnvironmentVariable("PG_HOST");
-                    var pgPort = Environment.GetEnvironmentVariable("PG_PORT");
-                    var pgUser = Environment.GetEnvironmentVariable("PG_USER");
-                    var pgPassword = Environment.GetEnvironmentVariable("PG_PASSWORD");
-                    var pgDb = Environment.GetEnvironmentVariable("PG_DB");
+                var pgHost = Environment.GetEnvironmentVariable("PG_HOST");
+                var pgPort = Environment.GetEnvironmentVariable("PG_PORT");
+                var pgUser = Environment.GetEnvironmentVariable("PG_USER");
+                var pgPassword = Environment.GetEnvironmentVariable("PG_PASSWORD");
+                var pgDb = Environment.GetEnvironmentVariable("PG_DB");
 
-                    connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPassword};Database={pgDb};SSL Mode=Disable";
-                // }
+                connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPassword};Database={pgDb};SSL Mode=Disable";
 
                 opt.UseNpgsql(connStr);
             });
@@ -48,7 +44,7 @@ namespace Paybills.API.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });                        
+            });
 
             return services;
         }

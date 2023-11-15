@@ -10,5 +10,6 @@ namespace Paybills.API.DTOs
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
         public ICollection<BillDto> Bills { get; set; }
+        public string Email { get; set; }
     }
 }

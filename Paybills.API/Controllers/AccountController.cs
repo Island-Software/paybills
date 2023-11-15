@@ -11,6 +11,7 @@ namespace Paybills.API.Controllers
 {
     public class AccountController : BaseApiController
     {
+        private const int EXPIRATION_TIME_IN_DAYS = 7;
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
@@ -42,12 +43,10 @@ namespace Paybills.API.Controllers
             return new LoginResultDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, EXPIRATION_TIME_IN_DAYS),
                 UserId = user.Id
             };
         }
-
-        private async Task<bool> UserExists(string userName) => await _userRepository.Exists(userName);
 
         [HttpPost("login")]        
         public async Task<ActionResult<LoginResultDto>> Login(LoginDto loginDto)
@@ -68,9 +67,11 @@ namespace Paybills.API.Controllers
             return new LoginResultDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, EXPIRATION_TIME_IN_DAYS),
                 UserId = user.Id
             };
         }
+
+        private async Task<bool> UserExists(string userName) => await _userRepository.Exists(userName);
     }
 }

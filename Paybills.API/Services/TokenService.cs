@@ -22,7 +22,7 @@ namespace Paybills.API.Services
                 _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("TOKEN_KEY")));
         }
 
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, int expirationTimeInDays)
         {
             var claims = new List<Claim>
             {
@@ -34,7 +34,7 @@ namespace Paybills.API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddDays(expirationTimeInDays),
                 SigningCredentials = credentials
             };
 

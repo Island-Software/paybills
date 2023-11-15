@@ -12,5 +12,8 @@ namespace Paybills.API.Entities
         public DateTime Created { get; set; } = DateTime.Now;
         public DateTime LastActive { get; set; } = DateTime.Now;
         public ICollection<Bill> Bills { get; set; }
+        public string Email { get; set; }
+        public string EmailToken { get; set; }
+        public bool EmailValidated { get; set; }
     }
 }

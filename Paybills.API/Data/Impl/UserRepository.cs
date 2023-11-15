@@ -23,7 +23,10 @@ namespace Paybills.API.Data
                 .SingleOrDefaultAsync(u => u.UserName == username);
         }
 
-        public void Update(AppUser user) => _context.Entry(user).State = EntityState.Modified;
+        public void Update(AppUser user)
+        {            
+            _context.Entry(user).State = EntityState.Modified;
+        }
 
         public void Create(AppUser user) => _context.Users.Add(user);
 

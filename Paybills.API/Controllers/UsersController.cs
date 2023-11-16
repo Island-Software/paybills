@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Paybills.API.Entities;
+using Amazon.SimpleEmail;
+using Paybills.API.Services;
+using System.ComponentModel.DataAnnotations;
+using Paybills.API.DTOs.User;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Paybills.API.Controllers
 {
@@ -17,9 +24,11 @@ namespace Paybills.API.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
+        private SESService _simpleEmailService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, ITokenService tokenService)
+        public UsersController(IUserRepository userRepository, IMapper mapper, ITokenService tokenService, SESService simpleEmailService)
         {
+            _simpleEmailService = simpleEmailService;
             _tokenService = tokenService;
             _mapper = mapper;
             _userRepository = userRepository;
@@ -42,14 +51,18 @@ namespace Paybills.API.Controllers
 
         [HttpGet]
         [Route("name/{username}")]
-        public async Task<ActionResult<UserDto>> GetUserByName(string username)
+        public async Task<ActionResult<UserEditDto>> GetUserByName(string username)
         {
-            return _mapper.Map<UserDto>(await _userRepository.GetUserByUsernameWithDetails(username));
+            return _mapper.Map<UserEditDto>(await _userRepository.GetUserByUsernameWithDetailsAsync(username));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, UserDto userDto)
+        public async Task<ActionResult> Update(int id, UserEditDto userDto)
         {
+            var emailValidator = new EmailAddressAttribute();
+
+            if (!emailValidator.IsValid(userDto.Email)) return BadRequest();
+
             var user = await _userRepository.GetUserByIdAsync(id);
 
             if (user == null) return NotFound();
@@ -62,22 +75,42 @@ namespace Paybills.API.Controllers
                 user.EmailToken = _tokenService.CreateToken(user, EMAIL_TOKEN_EXP_TIME_IN_DAYS);
                 user.EmailValidated = false;
             }
+            
+            if (!string.IsNullOrEmpty(userDto.Password))
+            {
+                using var hmac = new HMACSHA512();
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(userDto.Password));
+                user.PasswordSalt = hmac.Key;
+            }
 
             _userRepository.Update(user);
 
             if (validateEmail)
-                SendEmailVerification(user);
+                await SendEmailVerification(user);
 
             await _userRepository.SaveAllAsync();
 
             return Ok();
         }
 
-        private void SendEmailVerification(AppUser user)
+        private async Task<bool> SendEmailVerification(AppUser user)
         {
-            // var emailToken = 
+            var result = await _simpleEmailService.SendEmailAsync(
+                new List<string>() { user.Email }, 
+                null, 
+                null, 
+                GenerateVerificationEmail(user.Email, user.EmailToken),
+                "", 
+                "Required step - Email verification", 
+                "admin@billminder.com.br");
 
+            return result != string.Empty;
+        }
 
+        private string GenerateVerificationEmail(string email, string emailToken)
+        {
+            return $@"Your email has been configured on billminder.com.br.
+                Please click this link to validate: https://billminder.com.br/validate?email={email}&emailToken={emailToken}";
         }
     }
 }

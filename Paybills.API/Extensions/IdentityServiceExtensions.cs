@@ -11,7 +11,7 @@ namespace Paybills.API.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var tokenKey = String.Empty;
+            var tokenKey = string.Empty;
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 tokenKey = configuration["TokenKey"];

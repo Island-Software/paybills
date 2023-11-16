@@ -2,7 +2,6 @@ using System.Linq;
 using Paybills.API.DTOs;
 using Paybills.API.Entities;
 using AutoMapper;
-using System;
 
 namespace Paybills.API.Helpers
 {
@@ -11,6 +10,7 @@ namespace Paybills.API.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<AppUser, UserDto>();
+            CreateMap<AppUser, UserEditDto>();
             CreateMap<Bill, BillDto>()
                 .ForMember(dest => dest.UserName, 
                     opt => opt.MapFrom(src => (from user in src.Users 

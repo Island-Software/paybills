@@ -51,7 +51,7 @@ namespace Paybills.API.Controllers
         [HttpPost("login")]        
         public async Task<ActionResult<LoginResultDto>> Login(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByUsername(loginDto.UserName);
+            var user = await _userRepository.GetUserByUsernameAsync(loginDto.UserName);
 
             if (user == null) return Unauthorized("Invalid username/password");
 
@@ -61,7 +61,7 @@ namespace Paybills.API.Controllers
 
             for (int i = 0; i < computedHash.Length; i++)
             {
-                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password/password");
+                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid username/password");
             }
 
             return new LoginResultDto
@@ -72,6 +72,6 @@ namespace Paybills.API.Controllers
             };
         }
 
-        private async Task<bool> UserExists(string userName) => await _userRepository.Exists(userName);
+        private async Task<bool> UserExists(string userName) => await _userRepository.ExistsAsync(userName);
     }
 }

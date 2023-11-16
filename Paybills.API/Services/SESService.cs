@@ -61,8 +61,8 @@ namespace Paybills.API.Services
             string bodyHtml, string bodyText, string subject, string senderAddress)
         {
             var messageId = "";
-            try
-            {
+            // try
+            // {
                 var response = await _amazonSimpleEmailService.SendEmailAsync(
                     new SendEmailRequest
                     {
@@ -95,12 +95,13 @@ namespace Paybills.API.Services
                         },
                         Source = senderAddress
                     });
+                System.Console.WriteLine(response);
                 messageId = response.MessageId;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("SendEmailAsync failed with exception: " + ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine("SendEmailAsync failed with exception: " + ex.Message);
+            // }
 
             return messageId;
         }

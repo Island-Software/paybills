@@ -12,9 +12,10 @@ namespace Paybills.API.Interfaces
         Task<bool> SaveAllAsync();
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(int id);
-        Task<AppUser> GetUserByUsername(string username);
-        Task<AppUser> GetUserByUsernameWithDetails(string username);
+        Task<AppUser> GetUserByUsernameAsync(string username);
+        Task<AppUser> GetUserByUsernameWithDetailsAsync(string username);
+        Task<AppUser> GetUserByEmailAsync(string email);
 
-        Task<bool> Exists(string userName);        
+        Task<bool> ExistsAsync(string userName);        
     }
 }

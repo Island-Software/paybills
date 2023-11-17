@@ -8,6 +8,7 @@ using Paybills.API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Paybills.API.Services;
 
 namespace Paybills.API.Controllers
 {
@@ -17,9 +18,11 @@ namespace Paybills.API.Controllers
         private readonly IBillRepository _billsRepository;
         private readonly IBillTypeRepository _billTypesRepository;
         private readonly IMapper _mapper;
+        private readonly SESService _sesService;
 
-        public BillsController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper)
+        public BillsController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper, SESService sesService)
         {
+            _sesService = sesService;
             _mapper = mapper;
             _billsRepository = billsRepository;
             _billTypesRepository = billTypesRepository;
@@ -132,6 +135,17 @@ namespace Paybills.API.Controllers
         private async Task<bool> BillExists(int id)
         {
             return await _billsRepository.GetBillByIdAsync(id) != null;
+        }
+
+        [HttpGet]
+        [Route("billsdue")]
+        public ActionResult GetDueBills()
+        {
+            var workerService = new WorkerService(_sesService);
+
+            workerService.StartWorker();
+
+            return Ok();
         }
     }
 }

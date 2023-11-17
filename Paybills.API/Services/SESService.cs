@@ -95,7 +95,7 @@ namespace Paybills.API.Services
                         },
                         Source = senderAddress
                     });
-                System.Console.WriteLine(response);
+                Console.WriteLine(response);
                 messageId = response.MessageId;
             // }
             // catch (Exception ex)

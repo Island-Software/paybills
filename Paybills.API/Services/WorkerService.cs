@@ -33,9 +33,9 @@ namespace Paybills.API.Services
             }            
         }
 
-        private List<BillDue> GetBillsDue()
+        private List<BillsDue> GetBillsDue()
         {
-            var billsDue = new List<BillDue>();
+            var billsDue = new List<BillsDue>();
             using (var context = new DataContext())
             {
                 var initialDate = DateTime.Now;
@@ -54,14 +54,14 @@ namespace Paybills.API.Services
                     {
                         var userId = bill.Users.Take(1).FirstOrDefault().Id;
                         var userEmail = bill.Users.Take(1).FirstOrDefault().Email;
-                        billsDue.Add(new BillDue(userId, bill.BillType.Description, userEmail, bill.DueDate));
+                        billsDue.Add(new BillsDue(userId, bill.BillType.Description, userEmail, bill.DueDate));
                     }
                 }
             }
             return billsDue;
         }
 
-        private async void ProcessBills(List<BillDue> billsDue)
+        private async void ProcessBills(List<BillsDue> billsDue)
         {
             foreach (var bill in billsDue)
             {
@@ -77,14 +77,14 @@ namespace Paybills.API.Services
         }
     }
 
-    public class BillDue
+    public class BillsDue
     {
         public int UserId { get; set; }
         public string Description { get; set; }
         public string UserEmail { get; set; }
         public DateTime? DueDate { get; set; }
 
-        public BillDue(int userId, string description, string userEmail, DateTime? dueDate)
+        public BillsDue(int userId, string description, string userEmail, DateTime? dueDate)
         {
             UserId = userId;
             Description = description;
@@ -92,4 +92,6 @@ namespace Paybills.API.Services
             UserEmail = userEmail;
         }
     }
+
+    
 }

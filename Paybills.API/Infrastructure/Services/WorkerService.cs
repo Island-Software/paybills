@@ -9,11 +9,16 @@ namespace Paybills.API.Services
 {
     public class WorkerService
     {
+        public bool Stopped { get; set; }
+        public int ProcessIntervalInHours { get; set; }
+
+        private const int DEFAULT_PROCESS_INTERVAL = 1;
         private SESService _simpleEmailService;
 
         public WorkerService(SESService simpleEmailService)
         {
             _simpleEmailService = simpleEmailService;
+            ProcessIntervalInHours = DEFAULT_PROCESS_INTERVAL;
         }
 
         public async void StartWorker()
@@ -25,12 +30,12 @@ namespace Paybills.API.Services
 
         private async Task ExecuteEmailSending()
         {
-            while (true)
+            while (!Stopped)
             {
                 ProcessBills(GetBillsDue());
 
-                await Task.Delay(TimeSpan.FromHours(1));
-            }            
+                await Task.Delay(TimeSpan.FromHours(ProcessIntervalInHours));
+            }
         }
 
         private List<BillsDue> GetBillsDue()
@@ -42,11 +47,11 @@ namespace Paybills.API.Services
                 var finalDate = DateTime.Now.AddDays(3);
 
                 var bills = context.Bills
-                .Include(b => b.BillType)
-                .Include(b => b.Users)
-                .Where(b => b.DueDate > initialDate && b.DueDate < finalDate)
-                .AsNoTracking()
-                .ToList();
+                    .Include(b => b.BillType)
+                    .Include(b => b.Users)
+                    .Where(b => b.DueDate > initialDate && b.DueDate < finalDate)
+                    .AsNoTracking()
+                    .ToList();
 
                 foreach (var bill in bills)
                 {
@@ -61,19 +66,24 @@ namespace Paybills.API.Services
             return billsDue;
         }
 
-        private async void ProcessBills(List<BillsDue> billsDue)
+        private void ProcessBills(List<BillsDue> billsDue)
         {
             foreach (var bill in billsDue)
             {
-                var result = await _simpleEmailService.SendEmailAsync(
-                new List<string>() { bill.UserEmail }, 
-                null, 
-                null, 
-                $"This is a reminder that you have bills near the due date: {bill.Description} - {bill.DueDate:d}",
-                "", 
-                "Billminder - bill(s) near due date", 
-                "admin@billminder.com.br");
+                SendEmailAsync(bill);
             }
+        }
+
+        private async void SendEmailAsync(BillsDue billDue)
+        {
+            var result = await _simpleEmailService.SendEmailAsync(
+                new List<string>() { billDue.UserEmail },
+                null,
+                null,
+                $"This is a reminder that you have bills near the due date: {billDue.Description} - {billDue.DueDate:d}",
+                "",
+                "Billminder - bill(s) near due date",
+                "admin@billminder.com.br");
         }
     }
 
@@ -93,5 +103,5 @@ namespace Paybills.API.Services
         }
     }
 
-    
+
 }

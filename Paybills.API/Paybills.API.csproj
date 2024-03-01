@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'API' " />
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.7" />
@@ -23,4 +24,98 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Application\" />
+    <None Remove="Domain\" />
+    <None Remove="Infrastructure\" />
+    <None Remove="Application\Controllers\" />
+    <None Remove="Infrastructure\Data\" />
+    <None Remove="Domain\Entities\" />
+    <None Remove="Application\DTOs\" />
+    <None Remove="Infrastructure\Errors\" />
+    <None Remove="Infrastructure\Middleware\" />
+    <None Remove="Infrastructure\Services\" />
+    <None Remove="Infrastructure\Extensions\" />
+    <None Remove="Infrastructure\Helpers\" />
+    <None Remove="Presentation\" />
+    <None Remove="Presentation\wwwroot\3rdpartylicenses.txt" />
+    <None Remove="Presentation\wwwroot\favicon.ico" />
+    <None Remove="Presentation\wwwroot\fontawesome-webfont.1e59d2330b4c6deb84b3.ttf" />
+    <None Remove="Presentation\wwwroot\fontawesome-webfont.20fd1704ea223900efa9.woff2" />
+    <None Remove="Presentation\wwwroot\fontawesome-webfont.8b43027f47b20503057d.eot" />
+    <None Remove="Presentation\wwwroot\fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg" />
+    <None Remove="Presentation\wwwroot\fontawesome-webfont.f691f37e57f04c152e23.woff" />
+    <None Remove="Presentation\wwwroot\index.html" />
+    <None Remove="Presentation\wwwroot\main.d50b01f1d07eb1093dce.js" />
+    <None Remove="Presentation\wwwroot\polyfills.91e9fa647dea132cd93d.js" />
+    <None Remove="Presentation\wwwroot\runtime.59bfcf750567cb1b0409.js" />
+    <None Remove="Presentation\wwwroot\styles.236c725d8c2c4c20aa44.css" />
+    <None Remove="Presentation\wwwroot\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Application\Controllers\" />
+    <Folder Include="Infrastructure\Data\" />
+    <Folder Include="Domain\Entities\" />
+    <Folder Include="Application\DTOs\" />
+    <Folder Include="Infrastructure\Errors\" />
+    <Folder Include="Infrastructure\Middleware\" />
+    <Folder Include="Infrastructure\Services\" />
+    <Folder Include="Infrastructure\Extensions\" />
+    <Folder Include="Infrastructure\Helpers\" />
+    <Folder Include="Presentation\" />
+    <Folder Include="Presentation\wwwroot\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Presentation\wwwroot\3rdpartylicenses.txt">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\favicon.ico">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\fontawesome-webfont.1e59d2330b4c6deb84b3.ttf">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\fontawesome-webfont.20fd1704ea223900efa9.woff2">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\fontawesome-webfont.8b43027f47b20503057d.eot">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\fontawesome-webfont.f691f37e57f04c152e23.woff">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\index.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\main.d50b01f1d07eb1093dce.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\polyfills.91e9fa647dea132cd93d.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\runtime.59bfcf750567cb1b0409.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Presentation\wwwroot\styles.236c725d8c2c4c20aa44.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

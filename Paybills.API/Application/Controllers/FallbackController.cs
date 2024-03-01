@@ -7,7 +7,9 @@ namespace Paybills.API.Controllers
     {
         public ActionResult Index()
         {
-            return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+            return PhysicalFile(
+                Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "Presentation"), "wwwroot", "index.html"),
+                "text/HTML");
         }
     }
 }

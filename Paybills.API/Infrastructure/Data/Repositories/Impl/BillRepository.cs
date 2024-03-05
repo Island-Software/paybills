@@ -16,9 +16,19 @@ namespace Paybills.API.Data
             _billTypeRepository = billTypeRepository;
         }
 
-        public void Create(Bill bill) => _context.Bills.Add(bill);
+        public async Task<bool> Create(Bill bill)
+        {
+            _context.Bills.Add(bill);
 
-        public void Delete(Bill bill) => _context.Bills.Remove(bill);
+            return await SaveAllAsync();
+        }
+
+        public async Task<bool> Delete(Bill bill)
+        {
+            _context.Bills.Remove(bill);
+
+            return await SaveAllAsync();
+        }
 
         public async Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams)
         {
@@ -68,7 +78,12 @@ namespace Paybills.API.Data
 
         public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
-        public void Update(Bill bill) => _context.Entry(bill).State = EntityState.Modified;
+        public async Task<bool> Update(Bill bill)
+        {
+            _context.Entry(bill).State = EntityState.Modified;
+
+            return await SaveAllAsync();
+        }
 
         public async Task<bool> AddBillToUser(int userId, int billId)
         {
@@ -81,7 +96,7 @@ namespace Paybills.API.Data
 
             user.Bills.Add(bill);
 
-            return true;
+            return await SaveAllAsync();
         }
 
         public async Task<bool> AddBillsToUser(int userId, IEnumerable<Bill> bills)
@@ -95,7 +110,7 @@ namespace Paybills.API.Data
                 user.Bills.Add(bill);
             }
 
-            return true;
+            return await SaveAllAsync();
         }
 
         public async Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
@@ -122,15 +137,11 @@ namespace Paybills.API.Data
                     newBill.Month += 1;
                 }
 
-                Create(newBill);
-
-                await SaveAllAsync();
+                await Create(newBill);
 
                 newBills.Add(newBill);
             }
-            await AddBillsToUser(userId, newBills);
-
-            return true;
+            return await AddBillsToUser(userId, newBills);
         }
     }
 }

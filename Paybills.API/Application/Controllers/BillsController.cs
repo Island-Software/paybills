@@ -10,30 +10,31 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Paybills.API.Services;
 using System;
+using Paybills.API.Domain.Services.Interfaces;
 
 namespace Paybills.API.Controllers
 {
     [Authorize]
     public class BillsController : BaseApiController
     {
-        private readonly IBillRepository _billsRepository;
-        private readonly IBillTypeRepository _billTypesRepository;
+        private readonly IBillService _service;
+        private readonly IBillTypeService _billTypeService;
         private readonly IMapper _mapper;
         private readonly SESService _sesService;
 
-        public BillsController(IBillRepository billsRepository, IBillTypeRepository billTypesRepository, IMapper mapper, SESService sesService)
+        public BillsController(IBillService billService, IBillTypeService billTypesRepository, IMapper mapper, SESService sesService)
         {
             _sesService = sesService;
             _mapper = mapper;
-            _billsRepository = billsRepository;
-            _billTypesRepository = billTypesRepository;
+            _service = billService;
+            _billTypeService = billTypesRepository;
         }
 
         [HttpGet]
         [Route("name/{username}")]
         public async Task<ActionResult<IEnumerable<BillDto>>> GetBills(string username, [FromQuery] UserParams userParams)
         {
-            var bills = await _billsRepository.GetBillsAsync(username, userParams);
+            var bills = await _service.GetBillsAsync(username, userParams);
 
             Response.AddPaginationHeader(bills.CurrentPage, bills.PageSize, bills.TotalCount, bills.TotalPages);
 
@@ -46,7 +47,7 @@ namespace Paybills.API.Controllers
         [Route("name/{username}/{month}/{year}")]
         public async Task<ActionResult<IEnumerable<BillDto>>> GetBillsByDate(string username, int month, int year, [FromQuery] UserParams userParams)
         {
-            var bills = await _billsRepository.GetBillsByDateAsync(username, month, year, userParams);
+            var bills = await _service.GetBillsByDateAsync(username, month, year, userParams);
 
             Response.AddPaginationHeader(bills.CurrentPage, bills.PageSize, bills.TotalCount, bills.TotalPages);
 
@@ -58,19 +59,18 @@ namespace Paybills.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Bill>> GetBill(int id)
         {
-            var result = await _billsRepository.GetBillByIdAsync(id);
+            var result = await _service.GetBillByIdAsync(id);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var bill = await _billsRepository.GetBillByIdAsync(id);
+            var bill = await _service.GetBillByIdAsync(id);
 
             if (bill == null) return NotFound();
 
-            _billsRepository.Delete(bill);
-            await _billsRepository.SaveAllAsync();
+            await _service.Delete(bill);
 
             return Ok();
         }
@@ -78,7 +78,7 @@ namespace Paybills.API.Controllers
         [HttpPost("create")]
         public async Task<ActionResult<BillDto>> Create(BillRegisterDto bill)
         {
-            var billType = await _billTypesRepository.GetBillTypeByIdAsync(bill.TypeId);
+            var billType = await _billTypeService.GetBillTypeByIdAsync(bill.TypeId);
 
             if (billType == null) return BadRequest($"Bill type of id {bill.TypeId} not found");
 
@@ -92,10 +92,8 @@ namespace Paybills.API.Controllers
                 Paid = bill.Paid
             };
 
-            _billsRepository.Create(newBill);
-            await _billsRepository.SaveAllAsync();
-            await _billsRepository.AddBillToUser(bill.UserId, newBill.Id);
-            await _billsRepository.SaveAllAsync();
+            await _service.Create(newBill);
+            await _service.AddBillToUser(bill.UserId, newBill.Id);
 
             var billToReturn = _mapper.Map<BillDto>(newBill);
 
@@ -108,7 +106,7 @@ namespace Paybills.API.Controllers
             if (!await BillExists(id))
                 return NotFound();
 
-            var repoBill = await _billsRepository.GetBillByIdAsync(id);
+            var repoBill = await _service.GetBillByIdAsync(id);
 
             // TO-DO: add automapper to project
             repoBill.Value = bill.Value;
@@ -117,7 +115,7 @@ namespace Paybills.API.Controllers
             repoBill.Year = bill.Year;
             repoBill.Paid = bill.Paid;
 
-            await _billsRepository.SaveAllAsync();
+            await _service.Update(repoBill);
 
             return Ok();
         }
@@ -125,17 +123,15 @@ namespace Paybills.API.Controllers
         [HttpPost("copy")]
         public async Task<ActionResult> CopyBillsToNextMonth(PeriodDataDto periodData)
         {
-            var bills = await _billsRepository.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear);            
+            await _service.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear);            
 
-            await _billsRepository.SaveAllAsync();
-            
             return Ok();
         }
 
         // TO-DO: create an out property for the found object
         private async Task<bool> BillExists(int id)
         {
-            return await _billsRepository.GetBillByIdAsync(id) != null;
+            return await _service.GetBillByIdAsync(id) != null;
         }
 
         [HttpGet]

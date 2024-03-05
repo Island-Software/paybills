@@ -1,13 +1,14 @@
-using System;
 using Paybills.API.Data;
 using Paybills.API.Helpers;
 using Paybills.API.Interfaces;
 using Paybills.API.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Amazon.SimpleEmail;
+using Paybills.API.Domain.Services;
+using Paybills.API.Domain.Services.Interfaces;
+using Paybills.API.Domain.Services.Impl;
 
 namespace Paybills.API.Extensions
 {
@@ -18,6 +19,8 @@ namespace Paybills.API.Extensions
             services.AddAWSService<IAmazonSimpleEmailService>()
                     .AddTransient<SESService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IBillService, BillService>();
+            services.AddScoped<IBillTypeService, BillTypeService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillTypeRepository, BillTypeRepository>();

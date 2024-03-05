@@ -3,16 +3,14 @@ using System.Threading.Tasks;
 using Paybills.API.Entities;
 using Paybills.API.Helpers;
 
-namespace Paybills.API.Interfaces
+namespace Paybills.API.Domain.Services.Interfaces
 {
-    // TO-DO: use generics
-    public interface IBillRepository
+    public interface IBillService
     {
         Task<bool> Create(Bill bill);
         Task<bool> Delete(Bill bill);
         Task<bool> Update(Bill bill);
         Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear);
-        Task<bool> SaveAllAsync();
         Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams);
         Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams);
         Task<Bill> GetBillByIdAsync(int id);

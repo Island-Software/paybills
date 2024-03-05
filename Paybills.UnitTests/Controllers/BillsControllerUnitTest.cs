@@ -11,6 +11,7 @@ using FluentAssertions;
 using System.Net;
 using Paybills.UnitTests.Utils;
 using Paybills.API.Services;
+using Paybills.API.Domain.Services.Interfaces;
 
 namespace Paybills.UnitTests.Controllers
 {
@@ -23,8 +24,8 @@ namespace Paybills.UnitTests.Controllers
             var userName = DataUtils.RandomString(20);
 
             // Given
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -59,8 +60,8 @@ namespace Paybills.UnitTests.Controllers
              // Given
             var userName = DataUtils.RandomString(20);
 
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -88,8 +89,8 @@ namespace Paybills.UnitTests.Controllers
         {
             // Given
             var billId = DataUtils.RandomInt(1, 100);
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -107,8 +108,8 @@ namespace Paybills.UnitTests.Controllers
         public async void UpdateBill_MustSucceed()
         {
             // Given
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -122,7 +123,7 @@ namespace Paybills.UnitTests.Controllers
                 TypeId = 1, Value = 20.5f, Month = 2, Year = 2022, UserId = 1 });
 
             // Then
-            mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
+            // mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
             Assert.True(result is OkResult);
         }
 
@@ -130,8 +131,8 @@ namespace Paybills.UnitTests.Controllers
         public async void DeleteBill_MustSucceed()
         {
             // Given
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -145,7 +146,7 @@ namespace Paybills.UnitTests.Controllers
 
             // Then
             mockBillRepo.Verify(m => m.Delete(It.IsAny<Bill>()), Times.Once);
-            mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
+            // mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
             Assert.True(result is OkResult);
         }
 
@@ -153,8 +154,8 @@ namespace Paybills.UnitTests.Controllers
         public async void DeleteInexistentBill_ShouldReturnNotFound()
         {
             // Given
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -168,7 +169,7 @@ namespace Paybills.UnitTests.Controllers
 
             // Then
             mockBillRepo.Verify(m => m.Delete(It.IsAny<Bill>()), Times.Never);
-            mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Never);
+            // mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Never);
             Assert.True(result is NotFoundResult);
         }
 
@@ -179,8 +180,9 @@ namespace Paybills.UnitTests.Controllers
             var billRegDto = new BillRegisterDto() { TypeId = DataUtils.RandomInt(1, 50)};
             var billType = ModelUtils.GenerateRandomBillType();            
             var createdBill = ModelUtils.GenerateRandomBillDto();
-            Mock<IBillRepository> mockBillRepo = new Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Mock<IBillTypeRepository>();
+            
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -201,8 +203,8 @@ namespace Paybills.UnitTests.Controllers
         public async void CopyBillsToNextMonth_MustSucceed()
         {
             // Given
-            Mock<IBillRepository> mockBillRepo = new Moq.Mock<IBillRepository>();
-            Mock<IBillTypeRepository> mockBillTypeRepo = new Moq.Mock<IBillTypeRepository>();
+            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
@@ -214,7 +216,7 @@ namespace Paybills.UnitTests.Controllers
             
             // Then
             mockBillRepo.Verify(m => m.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear), Times.Once);
-            mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
+            // mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
         }
     }
 }

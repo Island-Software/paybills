@@ -203,20 +203,19 @@ namespace Paybills.UnitTests.Controllers
         public async void CopyBillsToNextMonth_MustSucceed()
         {
             // Given
-            Mock<IBillService> mockBillRepo = new Mock<IBillService>();
-            Mock<IBillTypeService> mockBillTypeRepo = new Mock<IBillTypeService>();
+            Mock<IBillService> mockBillService = new Mock<IBillService>();
+            Mock<IBillTypeService> mockBillTypeService = new Mock<IBillTypeService>();
             Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
-            var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object, sesService.Object);
+            var controller = new BillsController(mockBillService.Object, mockBillTypeService.Object, mockMapper.Object, sesService.Object);
             var periodData = new PeriodDataDto() { UserId = 1, CurrentMonth = 8, CurrentYear = 2022 };
             
             // When
             var result = await controller.CopyBillsToNextMonth(periodData);
             
             // Then
-            mockBillRepo.Verify(m => m.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear), Times.Once);
-            // mockBillRepo.Verify(m => m.SaveAllAsync(), Times.Once);
+            mockBillService.Verify(m => m.CopyBillsToNextMonth(periodData.UserId, periodData.CurrentMonth, periodData.CurrentYear), Times.Once);
         }
     }
 }

@@ -4,28 +4,27 @@ using System.Threading.Tasks;
 using Paybills.API.DTOs;
 using Paybills.API.Entities;
 using Paybills.API.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Paybills.API.Domain.Services.Interfaces;
 
 namespace Paybills.API.Controllers
 {
     public class AccountController : BaseApiController
     {
         private const int EXPIRATION_TIME_IN_DAYS = 7;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public AccountController(IUserRepository userRepository, ITokenService tokenService)
+        public AccountController(IUserService userService, ITokenService tokenService)
         {
             _tokenService = tokenService;
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
-        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<LoginResultDto>> Register(RegisterDto registerDto)
         {
-            if (await UserExists(registerDto.UserName)) 
+            if (await _userService.UserExistsAsync(registerDto.UserName)) 
                 return BadRequest("Username already exists");
 
             using var hmac = new HMACSHA512();
@@ -37,8 +36,8 @@ namespace Paybills.API.Controllers
                 PasswordSalt = hmac.Key
             };
 
-            _userRepository.Create(user);
-            await _userRepository.SaveAllAsync();
+            
+            await _userService.CreateAsync(user);
 
             return new LoginResultDto
             {
@@ -51,7 +50,7 @@ namespace Paybills.API.Controllers
         [HttpPost("login")]        
         public async Task<ActionResult<LoginResultDto>> Login(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(loginDto.UserName);
+            var user = await _userService.GetUserByUserNameAsync(loginDto.UserName);
 
             if (user == null) return Unauthorized("Invalid username/password");
 
@@ -71,7 +70,5 @@ namespace Paybills.API.Controllers
                 UserId = user.Id
             };
         }
-
-        private async Task<bool> UserExists(string userName) => await _userRepository.ExistsAsync(userName);
     }
 }

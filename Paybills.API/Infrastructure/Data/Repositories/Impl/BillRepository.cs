@@ -16,14 +16,14 @@ namespace Paybills.API.Data
             _billTypeRepository = billTypeRepository;
         }
 
-        public async Task<bool> Create(Bill bill)
+        public async Task<bool> CreateAsync(Bill bill)
         {
             _context.Bills.Add(bill);
 
             return await SaveAllAsync();
         }
 
-        public async Task<bool> Delete(Bill bill)
+        public async Task<bool> DeleteAsync(Bill bill)
         {
             _context.Bills.Remove(bill);
 
@@ -78,14 +78,14 @@ namespace Paybills.API.Data
 
         public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
-        public async Task<bool> Update(Bill bill)
+        public async Task<bool> UpdateAsync(Bill bill)
         {
             _context.Entry(bill).State = EntityState.Modified;
 
             return await SaveAllAsync();
         }
 
-        public async Task<bool> AddBillToUser(int userId, int billId)
+        public async Task<bool> AddBillToUserAsync(int userId, int billId)
         {
             var user = await _context.Users
                 .Include(u => u.Bills)
@@ -99,7 +99,7 @@ namespace Paybills.API.Data
             return await SaveAllAsync();
         }
 
-        public async Task<bool> AddBillsToUser(int userId, IEnumerable<Bill> bills)
+        public async Task<bool> AddBillsToUserAsync(int userId, IEnumerable<Bill> bills)
         {
             var user = await _context.Users
                 .Include(u => u.Bills)
@@ -113,7 +113,7 @@ namespace Paybills.API.Data
             return await SaveAllAsync();
         }
 
-        public async Task<bool> CopyBillsToNextMonth(int userId, int currentMonth, int currentYear)
+        public async Task<bool> CopyBillsToNextMonthAsync(int userId, int currentMonth, int currentYear)
         {
             var bills = await GetBillsAsync(userId, currentMonth, currentYear);
             var newBills = new List<Bill>();
@@ -137,11 +137,11 @@ namespace Paybills.API.Data
                     newBill.Month += 1;
                 }
 
-                await Create(newBill);
+                await CreateAsync(newBill);
 
                 newBills.Add(newBill);
             }
-            return await AddBillsToUser(userId, newBills);
+            return await AddBillsToUserAsync(userId, newBills);
         }
     }
 }

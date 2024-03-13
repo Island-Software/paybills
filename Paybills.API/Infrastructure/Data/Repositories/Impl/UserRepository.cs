@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Paybills.API.Entities;
 using Paybills.API.Interfaces;
@@ -30,7 +29,7 @@ namespace Paybills.API.Data
 
         public void Create(AppUser user) => _context.Users.Add(user);
 
-        public async Task<bool> ExistsAsync(string userName) => await _context.Users.AnyAsync(user => user.UserName == userName.ToLower());
+        public async Task<bool> ExistsAsync(string userName) => await _context.Users.AnyAsync(user => user.UserName.ToLower() == userName.ToLower());
 
         public async Task<AppUser> GetUserByUsernameAsync(string username) => await _context.Users.SingleOrDefaultAsync(u => u.UserName.ToLower() == username.ToLower());
 

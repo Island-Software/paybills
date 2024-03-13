@@ -5,15 +5,12 @@ using Paybills.API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Paybills.API.Entities;
-using Amazon.SimpleEmail;
 using Paybills.API.Services;
 using System.ComponentModel.DataAnnotations;
-using Paybills.API.DTOs.User;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using System.Text;
+using Paybills.API.Domain.Services.Interfaces;
 
 namespace Paybills.API.Controllers
 {
@@ -21,12 +18,12 @@ namespace Paybills.API.Controllers
     public class UsersController : BaseApiController
     {
         private const int EMAIL_TOKEN_EXP_TIME_IN_DAYS = 1;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userRepository;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private SESService _simpleEmailService;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, ITokenService tokenService, SESService simpleEmailService)
+        public UsersController(IUserService userRepository, IMapper mapper, ITokenService tokenService, SESService simpleEmailService)
         {
             _simpleEmailService = simpleEmailService;
             _tokenService = tokenService;
@@ -53,7 +50,7 @@ namespace Paybills.API.Controllers
         [Route("name/{username}")]
         public async Task<ActionResult<UserEditDto>> GetUserByName(string username)
         {
-            return _mapper.Map<UserEditDto>(await _userRepository.GetUserByUsernameWithDetailsAsync(username));
+            return _mapper.Map<UserEditDto>(await _userRepository.GetUserByUserNameWithDetailsAsync(username));
         }
 
         [HttpPut("{id}")]
@@ -83,12 +80,10 @@ namespace Paybills.API.Controllers
                 user.PasswordSalt = hmac.Key;
             }
 
-            _userRepository.Update(user);
+            await _userRepository.UpdateAsync(user);
 
             if (validateEmail)
                 await SendEmailVerification(user);
-
-            await _userRepository.SaveAllAsync();
 
             return Ok();
         }

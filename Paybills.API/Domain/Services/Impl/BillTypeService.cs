@@ -22,7 +22,7 @@ namespace Paybills.API.Domain.Services
 
         public async Task<bool> Create(BillType billType)
         {
-            _repository.Create(billType);
+            await _repository.CreateAsync(billType);
 
             return await _repository.SaveAllAsync();
         }
@@ -36,7 +36,7 @@ namespace Paybills.API.Domain.Services
 
         public Task<IEnumerable<BillType>> GetBillTypeByDescription(string description)
         {
-            return _repository.GetBillTypeByDescription(description);
+            return _repository.GetBillTypeByDescriptionAsync(description);
         }
 
         public Task<BillType> GetBillTypeByIdAsync(int id)

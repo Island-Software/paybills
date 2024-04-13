@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Paybills.API.Entities;
 
@@ -16,6 +15,6 @@ namespace Paybills.API.Interfaces
         Task<AppUser> GetUserByUsernameWithDetailsAsync(string username);
         Task<AppUser> GetUserByEmailAsync(string email);
 
-        Task<bool> ExistsAsync(string userName);        
+        Task<bool> ExistsAsync(string userName);
     }
 }

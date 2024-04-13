@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 using Paybills.API.Domain.Services.Interfaces;
+using Paybills.API.Application.Controllers;
 
 namespace Paybills.API.Controllers
 {
@@ -72,7 +73,7 @@ namespace Paybills.API.Controllers
                 user.EmailToken = _tokenService.CreateToken(user, EMAIL_TOKEN_EXP_TIME_IN_DAYS);
                 user.EmailValidated = false;
             }
-            
+
             if (!string.IsNullOrEmpty(userDto.Password))
             {
                 using var hmac = new HMACSHA512();
@@ -91,21 +92,26 @@ namespace Paybills.API.Controllers
         private async Task<bool> SendEmailVerification(AppUser user)
         {
             var result = await _simpleEmailService.SendEmailAsync(
-                new List<string>() { user.Email }, 
-                null, 
-                null, 
-                GenerateVerificationEmail(user.Email, user.EmailToken),
-                "", 
-                "Required step - Email verification", 
+                new List<string>() { user.Email },
+                null,
+                null,
+                GenerateVerificationEmail(user.UserName, user.Email, user.EmailToken),
+                "",
+                "Required step - Email verification",
                 "admin@billminder.com.br");
 
             return result != string.Empty;
         }
 
-        private string GenerateVerificationEmail(string email, string emailToken)
+        private string GenerateVerificationEmail(string userName, string email, string emailToken)
         {
-            return $@"Your email has been configured on billminder.com.br.
-                Please click this link to validate: https://billminder.com.br/validate?email={email}&emailToken={emailToken}";
+            var verificationEmail = Consts.VerificationEmail;
+
+            verificationEmail = verificationEmail.Replace("{username}", userName);
+            verificationEmail = verificationEmail.Replace("<email>", email);
+            verificationEmail = verificationEmail.Replace("<email-token>", emailToken);
+
+            return verificationEmail;
         }
     }
 }

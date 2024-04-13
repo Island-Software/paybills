@@ -15,9 +15,9 @@ namespace Paybills.API.Domain.Services
             _repository = repository;
         }
 
-        public Task<bool> BillTypeExists(string description)
+        public async Task<bool> BillTypeExists(string description)
         {
-            throw new System.NotImplementedException();
+            return await _repository.BillTypeExistsAsync(description);
         }
 
         public async Task<bool> Create(BillType billType)

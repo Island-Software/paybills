@@ -1,0 +1,18 @@
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Paybills.API.Controllers
+{
+    public class FallbackController : Controller
+    {
+        public ActionResult Index()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), 
+                Path.Combine("Presentation", "wwwroot"), 
+                "index.html");
+            return PhysicalFile(
+                path,
+                "text/HTML");
+        }
+    }
+}

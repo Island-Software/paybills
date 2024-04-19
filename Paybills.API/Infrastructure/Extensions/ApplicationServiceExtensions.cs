@@ -9,6 +9,7 @@ using Amazon.SimpleEmail;
 using Paybills.API.Domain.Services;
 using Paybills.API.Domain.Services.Interfaces;
 using Paybills.API.Domain.Services.Impl;
+using Serilog;
 
 namespace Paybills.API.Extensions
 {
@@ -34,6 +35,8 @@ namespace Paybills.API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
+
+            services.AddSerilog();
 
             return services;
         }

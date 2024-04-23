@@ -2,10 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Paybills.API.Data;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 namespace Paybills.API
 {
@@ -13,7 +16,7 @@ namespace Paybills.API
     {
         public static async Task Main(string[] args)
         {
-            // ConfigureLogging();
+            ConfigureLogging();
 
             var host = CreateHostBuilder(args).Build();
 
@@ -35,21 +38,24 @@ namespace Paybills.API
             await host.RunAsync();
         }
 
-        // private static void ConfigureLogging() {
-        //     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        //     var configuration = new ConfigurationBuilder()
-        //         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        //         .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
-        //         .Build();
+        private static void ConfigureLogging() {
+            // var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configuration = new ConfigurationBuilder()
+                // .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                // .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+                .Build();
 
-        //     Log.Logger = new LoggerConfiguration()
-        //         .Enrich.FromLogContext()
-        //         .WriteTo.Debug()
-        //         .WriteTo.Console()
-        //         .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
-        //         .ReadFrom.Configuration(configuration)
-        //         .CreateLogger();
-        // }
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
+                    IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
+                    AutoRegisterTemplate = true
+                })
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+        }
 
         // private static ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
         // {
@@ -64,9 +70,7 @@ namespace Paybills.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    // webBuilder.UseUrls("https://localhost:5001");
                     webBuilder.UseStartup<Startup>();
                 });
-                // .UseSerilog();
     }
 }

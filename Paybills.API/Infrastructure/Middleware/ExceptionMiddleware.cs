@@ -17,9 +17,9 @@ namespace Paybills.API.Middleware
 
         public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment environment)
         {
-            this._logger = logger;
-            this._next = next;
-            this._environment = environment;
+            _logger = logger;
+            _next = next;
+            _environment = environment;
         }
 
         public async Task InvokeAsync(HttpContext context)

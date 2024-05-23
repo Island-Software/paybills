@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Paybills.API.Data;
 using Serilog;
-using Serilog.Sinks.Elasticsearch;
+// using Serilog.Sinks.Elasticsearch;
 
 namespace Paybills.API
 {
@@ -49,10 +49,10 @@ namespace Paybills.API
                 .Enrich.FromLogContext()
                 .WriteTo.Debug()
                 .WriteTo.Console()
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
-                    IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
-                    AutoRegisterTemplate = true
-                })
+                // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
+                //     IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
+                //     AutoRegisterTemplate = true
+                // })
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }

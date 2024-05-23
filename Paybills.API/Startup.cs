@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Http;
 
 namespace Paybills.API
 {
@@ -51,6 +52,13 @@ namespace Paybills.API
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'");
+                await next();
+            }
+            );
 
             app.UseEndpoints(endpoints =>
             {

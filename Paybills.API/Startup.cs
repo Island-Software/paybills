@@ -55,7 +55,7 @@ namespace Paybills.API
 
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Append("Content-Security-Policy", "default-src 'self' 'sha256-JDEsH8lbRioBbeB9+A0dg1/H80pZxJzkvdPvfmFtyws='; script-src 'self'; style-src 'self'; font-src https://fonts.gstatic.com;");
+                context.Response.Headers.Append("Content-Security-Policy", "default-src 'none'; font-src https://fonts.gstatic.com; img-src 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com");
                 await next();
             }
             );

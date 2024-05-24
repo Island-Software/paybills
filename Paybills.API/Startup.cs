@@ -55,7 +55,7 @@ namespace Paybills.API
 
             app.Use(async (context, next) =>
             {
-                context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; font-src https://fonts.gstatic.com;");
+                context.Response.Headers.Append("Content-Security-Policy", "default-src 'self' https://billminder.com.br;");
                 await next();
             }
             );

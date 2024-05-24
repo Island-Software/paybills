@@ -5,15 +5,33 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+    - name: Setup .Net 8.x
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
     - name: Restore dependencies
       run: dotnet restore
-    - name: Stop API service
-      run: sudo systemctl stop kestrel-paybills.service
     - name: Build
-      run: dotnet build Paybills.API/Paybills.API.csproj --no-restore -c Release --output /var/www/paybills
+      run: dotnet build Paybills.API/Paybills.API.csproj --no-restore -c Release --output release
+    - uses: actions/upload-artifact@master
+      with:
+        name: paybills-api
+        path: release
+      
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+    - name: Stop API service
+      run: sudo systemctl stop kestrel-paybills.service      
+    - uses: actions/checkout@master
+    - uses: actions/download-artifact@master
+      with:
+        name: paybills-api
+        path: /var/www/paybills
     - name: Start API service
       run: sudo systemctl start kestrel-paybills.service

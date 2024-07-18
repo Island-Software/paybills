@@ -21,17 +21,3 @@ jobs:
       with:
         name: paybills-api
         path: release
-      
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-    - name: Stop API service
-      run: sudo systemctl stop kestrel-paybills.service      
-    - uses: actions/checkout@master
-    - uses: actions/download-artifact@master
-      with:
-        name: paybills-api
-        path: /var/www/paybills
-    - name: Start API service
-      run: sudo systemctl start kestrel-paybills.service

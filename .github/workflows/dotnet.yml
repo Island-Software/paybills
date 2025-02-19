@@ -14,7 +14,7 @@ jobs:
           echo "MY_VAR2=value2" >> $GITHUB_OUTPUT
       - name: output values
         run: |
-          echo "MY_VAR -> " $MY_VAR          
+          echo "MY_VAR -> " env.MY_VAR          
     outputs:
       MY_VAR_TWO: ${{ steps.set-variables.outputs.MY_VAR2 }}
       

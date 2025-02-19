@@ -1,25 +1,25 @@
 name: .NET test
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+  workflow_dispatch:
+  
 jobs:
-  build:
-
+  build:   
     runs-on: ubuntu-latest
-
+    name: build
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - id: set-variables
+        run: |
+          echo "MY_VAR=value1" >> $GITHUB_ENV
+          echo "MY_VAR2=value2" >> $GITHUB_OUTPUT
+    outputs:
+      MY_VAR_TWO: ${{ steps.set-variables.outputs.MY_VAR2 }}
+      
+  test:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: output values
+        run: |
+          echo "MY_VAR -> " $MYVAR
+          echo "MY_VAR2 -> " ${{ needs.build.outputs.MY_VAR_TWO }} 

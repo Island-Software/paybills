@@ -13,10 +13,7 @@ namespace Paybills.API.Extensions
         {
             var tokenKey = string.Empty;
 
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-                tokenKey = configuration["TokenKey"];
-            else
-                tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY");
+            tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY");
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>

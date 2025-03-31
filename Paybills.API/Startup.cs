@@ -50,8 +50,8 @@ namespace Paybills.API
 
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            // app.UseDefaultFiles();
+            // app.UseStaticFiles();
 
             app.Use(async (context, next) =>
             {
@@ -64,7 +64,7 @@ namespace Paybills.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToController("Index", "Fallback");
+                // endpoints.MapFallbackToController("Index", "Fallback");
             });
             
             app.UseHealthChecks("/api/health");

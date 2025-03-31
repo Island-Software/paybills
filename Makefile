@@ -14,7 +14,7 @@ docker-build-amd64:
 	docker buildx build --platform=linux/amd64 -t paybills-api:latest .
 
 docker-run:
-	docker compose up
+	docker compose up -d
 
 run:
 	dotnet run --project Paybills.API/Paybills.API.csproj

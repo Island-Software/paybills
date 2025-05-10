@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Paybills.API.Data;
 using Paybills.API.Infrastructure.Helpers;
 using Serilog;
+using Serilog.Events;
 // using Serilog.Sinks.Elasticsearch;
 
 namespace Paybills.API
@@ -35,7 +36,7 @@ namespace Paybills.API
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(e, "An error ocurred during migration");
                 }
-            }
+            }            
 
             await host.RunAsync();
         }
@@ -51,15 +52,19 @@ namespace Paybills.API
                 // .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
                 .Build();
 
+                
+
             Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
+            //     .Enrich.FromLogContext()
                 .WriteTo.Debug()
                 .WriteTo.Console()
+
                 // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
                 //     IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
                 //     AutoRegisterTemplate = true
                 // })
-                .ReadFrom.Configuration(configuration)
+
+                // .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
 

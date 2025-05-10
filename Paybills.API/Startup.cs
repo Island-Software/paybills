@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Paybills.API
 {
@@ -14,7 +15,7 @@ namespace Paybills.API
         public IConfiguration _config { get; }
         public Startup(IConfiguration config)
         {
-            this._config = config;
+            _config = config;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -50,9 +51,6 @@ namespace Paybills.API
 
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            // app.UseDefaultFiles();
-            // app.UseStaticFiles();
-
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Append("Content-Security-Policy", 
@@ -64,7 +62,6 @@ namespace Paybills.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                // endpoints.MapFallbackToController("Index", "Fallback");
             });
             
             app.UseHealthChecks("/api/health");

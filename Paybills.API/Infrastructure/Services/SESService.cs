@@ -12,6 +12,11 @@ namespace Paybills.API.Services
     {
         private IAmazonSimpleEmailService _amazonSimpleEmailService;
 
+        public SESService()
+        {
+            
+        }
+
         public SESService(IAmazonSimpleEmailService amazonSimpleEmailService)
         {
             _amazonSimpleEmailService = amazonSimpleEmailService;

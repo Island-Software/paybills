@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Paybills.API.Data;
+using Paybills.API.Infrastructure.Helpers;
 using Serilog;
+using Serilog.Events;
 // using Serilog.Sinks.Elasticsearch;
 
 namespace Paybills.API
@@ -33,27 +36,35 @@ namespace Paybills.API
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(e, "An error ocurred during migration");
                 }
-            }
+            }            
 
             await host.RunAsync();
         }
 
         private static void ConfigureLogging() {
+            var appRootDirectory = Directory.GetCurrentDirectory();
+            var dotEnvFilePath = Path.Combine(appRootDirectory, ".env");
+            DotEnv.Load(dotEnvFilePath);
+
             // var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                // .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 // .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
                 .Build();
 
+                
+
             Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
+            //     .Enrich.FromLogContext()
                 .WriteTo.Debug()
                 .WriteTo.Console()
+
                 // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
                 //     IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
                 //     AutoRegisterTemplate = true
                 // })
-                .ReadFrom.Configuration(configuration)
+
+                // .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
 

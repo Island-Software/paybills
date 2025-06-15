@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Paybills.API.DTOs;
-using Paybills.API.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Paybills.API.Domain.Services.Interfaces;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Controllers
 {
@@ -38,21 +38,21 @@ namespace Paybills.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypes() => Ok(_mapper.Map<IEnumerable<BillTypeDto>>(await _service.GetBillTypesAsync()));
+        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypes() => Ok(_mapper.Map<IEnumerable<BillTypeDto>>(await _service.GetAsync()));
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BillTypeDto>> GetBillType(int id) => _mapper.Map<BillTypeDto>(await _service.GetBillTypeByIdAsync(id));
+        public async Task<ActionResult<BillTypeDto>> GetBillType(int id) => _mapper.Map<BillTypeDto>(await _service.GetByIdAsync(id));
 
         [HttpGet]
         [Route("search/{description}")]
-        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypesByDescription(string description) => Ok(await _service.GetBillTypeByDescription(description));
+        public async Task<ActionResult<IEnumerable<BillTypeDto>>> GetBillTypesByDescription(string description) => Ok(await _service.GetByDescription(description));
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, BillTypeDto billType)
         {
             if (!await TypeExists(id)) return NotFound();
 
-            var repoBillType = await _service.GetBillTypeByIdAsync(id);
+            var repoBillType = await _service.GetByIdAsync(id);
 
             repoBillType.Description = billType.Description;
             repoBillType.Active = billType.Active;
@@ -65,7 +65,7 @@ namespace Paybills.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var billType = await _service.GetBillTypeByIdAsync(id);
+            var billType = await _service.GetByIdAsync(id);
 
             if (billType == null) return NotFound();
 
@@ -73,14 +73,15 @@ namespace Paybills.API.Controllers
 
             return Ok();
         }
+        
         private async Task<bool> TypeExists(int id)
         {
-            return await _service.GetBillTypeByIdAsync(id) != null;
+            return await _service.GetByIdAsync(id) != null;
         }
 
         private async Task<bool> TypeExists(string description)
         {                    
-            return await _service.BillTypeExists(description);
+            return await _service.Exists(description);
         }
     }
 }

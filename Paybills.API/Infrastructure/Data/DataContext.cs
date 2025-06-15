@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Data
 {

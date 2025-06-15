@@ -1,16 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Paybills.API.DTOs;
-using Paybills.API.Entities;
 using Paybills.API.Extensions;
 using Paybills.API.Helpers;
-using Paybills.API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Paybills.API.Services;
-using System;
 using Paybills.API.Domain.Services.Interfaces;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Controllers
 {
@@ -78,7 +76,7 @@ namespace Paybills.API.Controllers
         [HttpPost("create")]
         public async Task<ActionResult<BillDto>> Create(BillRegisterDto bill)
         {
-            var billType = await _billTypeService.GetBillTypeByIdAsync(bill.TypeId);
+            var billType = await _billTypeService.GetByIdAsync(bill.TypeId);
 
             if (billType == null) return BadRequest($"Bill type of id {bill.TypeId} not found");
 

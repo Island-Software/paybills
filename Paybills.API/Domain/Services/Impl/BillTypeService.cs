@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Paybills.API.Domain.Entities;
 using Paybills.API.Domain.Services.Interfaces;
-using Paybills.API.Entities;
 using Paybills.API.Interfaces;
 
 namespace Paybills.API.Domain.Services
@@ -15,7 +15,7 @@ namespace Paybills.API.Domain.Services
             _repository = repository;
         }
 
-        public async Task<bool> BillTypeExists(string description)
+        public async Task<bool> Exists(string description)
         {
             return await _repository.BillTypeExistsAsync(description);
         }
@@ -34,17 +34,17 @@ namespace Paybills.API.Domain.Services
             return await _repository.SaveAllAsync();
         }
 
-        public Task<IEnumerable<BillType>> GetBillTypeByDescription(string description)
+        public Task<IEnumerable<BillType>> GetByDescription(string description)
         {
             return _repository.GetBillTypeByDescriptionAsync(description);
         }
 
-        public Task<BillType> GetBillTypeByIdAsync(int id)
+        public Task<BillType> GetByIdAsync(int id)
         {
             return _repository.GetBillTypeByIdAsync(id);
         }
 
-        public Task<IEnumerable<BillType>> GetBillTypesAsync()
+        public Task<IEnumerable<BillType>> GetAsync()
         {
             return _repository.GetBillTypesAsync();
         }

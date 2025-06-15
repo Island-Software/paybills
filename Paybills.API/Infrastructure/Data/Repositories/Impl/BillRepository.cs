@@ -5,6 +5,7 @@ using Paybills.API.Entities;
 using Paybills.API.Helpers;
 using Paybills.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Data
 {

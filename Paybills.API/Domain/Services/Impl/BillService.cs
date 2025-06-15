@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Paybills.API.Domain.Entities;
 using Paybills.API.Domain.Services.Interfaces;
-using Paybills.API.Entities;
 using Paybills.API.Helpers;
 using Paybills.API.Interfaces;
 

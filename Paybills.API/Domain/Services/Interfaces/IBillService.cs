@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Paybills.API.Entities;
+using Paybills.API.Domain.Entities;
 using Paybills.API.Helpers;
 
 namespace Paybills.API.Domain.Services.Interfaces

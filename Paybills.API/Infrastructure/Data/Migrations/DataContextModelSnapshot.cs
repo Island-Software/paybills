@@ -84,6 +84,56 @@ namespace Paybills.API.Data.Migrations
                     b.ToTable("BillTypes");
                 });
 
+            modelBuilder.Entity("Paybills.API.Domain.Entities.Receiving", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("Month")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Received")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ReceivingDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("ReceivingTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceivingTypeId");
+
+                    b.ToTable("Receivings");
+                });
+
+            modelBuilder.Entity("Paybills.API.Domain.Entities.ReceivingType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReceivingTypes");
+                });
+
             modelBuilder.Entity("Paybills.API.Entities.AppUser", b =>
                 {
                     b.Property<int>("Id")
@@ -112,10 +162,15 @@ namespace Paybills.API.Data.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("bytea");
 
+                    b.Property<int?>("ReceivingId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserName")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceivingId");
 
                     b.ToTable("Users");
                 });
@@ -142,6 +197,27 @@ namespace Paybills.API.Data.Migrations
                         .HasForeignKey("BillTypeId");
 
                     b.Navigation("BillType");
+                });
+
+            modelBuilder.Entity("Paybills.API.Domain.Entities.Receiving", b =>
+                {
+                    b.HasOne("Paybills.API.Domain.Entities.ReceivingType", "ReceivingType")
+                        .WithMany()
+                        .HasForeignKey("ReceivingTypeId");
+
+                    b.Navigation("ReceivingType");
+                });
+
+            modelBuilder.Entity("Paybills.API.Entities.AppUser", b =>
+                {
+                    b.HasOne("Paybills.API.Domain.Entities.Receiving", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ReceivingId");
+                });
+
+            modelBuilder.Entity("Paybills.API.Domain.Entities.Receiving", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

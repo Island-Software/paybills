@@ -41,5 +41,8 @@ namespace Paybills.API.Data
         public DbSet<AppUser> Users { get; set; }
         public DbSet<BillType> BillTypes { get; set; }
         public DbSet<Bill> Bills { get; set; }
+        public DbSet<ReceivingType> ReceivingTypes { get; set; }
+        public DbSet<Receiving> Receivings { get; set; }
+
     }
 }

@@ -22,6 +22,8 @@ namespace Paybills.API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IBillTypeService, BillTypeService>();
+            services.AddScoped<IReceivingService, ReceivingService>();
+            services.AddScoped<IReceivingTypeService, ReceivingTypeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBillRepository, BillRepository>();

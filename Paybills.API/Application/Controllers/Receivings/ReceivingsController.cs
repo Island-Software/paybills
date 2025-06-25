@@ -26,7 +26,7 @@ namespace Paybills.API.Application.Controllers
         public async Task<ActionResult<IEnumerable<ReceivingDto>>> GetReceivings(string username, [FromQuery] UserParams userParams)
         {
             // Simulate fetching data from a service
-            var receivings = await _receivingService.GetReceivingsAsync(username, userParams);
+            var receivings = await _receivingService.GetAsync(username, userParams);
 
             // Add pagination header to the response
             Response.AddPaginationHeader(receivings.CurrentPage, receivings.PageSize, receivings.TotalCount, receivings.TotalPages);

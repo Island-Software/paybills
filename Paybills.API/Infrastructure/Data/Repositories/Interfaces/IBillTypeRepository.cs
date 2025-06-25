@@ -11,10 +11,9 @@ namespace Paybills.API.Interfaces
         void Update(BillType bill);
         // Change it to a base repository class
         Task<bool> SaveAllAsync();
-        Task<IEnumerable<BillType>> GetBillTypesAsync();
-        Task<BillType> GetBillTypeByIdAsync(int id);
-        Task<IEnumerable<BillType>> GetBillTypeByDescriptionAsync(string description);
-
-        Task<bool> BillTypeExistsAsync(string description);
+        Task<IEnumerable<BillType>> GetAsync();
+        Task<BillType> GetByIdAsync(int id);
+        Task<IEnumerable<BillType>> GetByDescriptionAsync(string description);
+        Task<bool> ExistsAsync(string description);
     }
 }

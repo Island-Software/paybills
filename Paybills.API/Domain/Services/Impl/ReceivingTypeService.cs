@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Paybills.API.Domain.Entities;
@@ -10,40 +9,49 @@ namespace Paybills.API.Domain.Services.Impl
     public class ReceivingTypeService : IReceivingTypeService
     {
         private readonly IReceivingTypeRepository _repository;
-        
-        public Task<bool> Create(ReceivingType entity)
+
+        public ReceivingTypeService(IReceivingTypeRepository repository)
         {
-            throw new NotImplementedException();
+            _repository = repository;
+        }
+        
+        public async Task<bool> Create(ReceivingType entity)
+        {
+            await _repository.CreateAsync(entity);
+
+            return await _repository.SaveAllAsync();
         }
 
         public Task<bool> Delete(ReceivingType entity)
         {
-            throw new NotImplementedException();
+            _repository.Delete(entity);
+            return _repository.SaveAllAsync();
         }
 
         public Task<bool> Exists(string description)
         {
-            throw new NotImplementedException();
+            return _repository.ExistsAsync(description);
         }
 
         public Task<IEnumerable<ReceivingType>> GetAsync()
         {
-            throw new NotImplementedException();
+            return _repository.GetAsync();
         }
 
         public Task<IEnumerable<ReceivingType>> GetByDescription(string description)
         {
-            throw new NotImplementedException();
+            return _repository.GetByDescriptionAsync(description);
         }
 
         public Task<ReceivingType> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return _repository.GetByIdAsync(id);
         }
 
         public Task<bool> Update(ReceivingType entity)
         {
-            throw new NotImplementedException();
+            _repository.Update(entity);
+            return _repository.SaveAllAsync();
         }
     }
 }

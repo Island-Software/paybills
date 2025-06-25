@@ -15,10 +15,7 @@ namespace Paybills.API.Domain.Services
             _repository = repository;
         }
 
-        public async Task<bool> Exists(string description)
-        {
-            return await _repository.BillTypeExistsAsync(description);
-        }
+        public async Task<bool> Exists(string description) => await _repository.ExistsAsync(description);
 
         public async Task<bool> Create(BillType billType)
         {
@@ -34,20 +31,11 @@ namespace Paybills.API.Domain.Services
             return await _repository.SaveAllAsync();
         }
 
-        public Task<IEnumerable<BillType>> GetByDescription(string description)
-        {
-            return _repository.GetBillTypeByDescriptionAsync(description);
-        }
+        public Task<IEnumerable<BillType>> GetByDescription(string description) => _repository.GetByDescriptionAsync(description);
 
-        public Task<BillType> GetByIdAsync(int id)
-        {
-            return _repository.GetBillTypeByIdAsync(id);
-        }
+        public Task<BillType> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
 
-        public Task<IEnumerable<BillType>> GetAsync()
-        {
-            return _repository.GetBillTypesAsync();
-        }
+        public Task<IEnumerable<BillType>> GetAsync() => _repository.GetAsync();
 
         public Task<bool> Update(BillType bill)
         {

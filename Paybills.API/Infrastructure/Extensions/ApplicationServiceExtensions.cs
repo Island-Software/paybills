@@ -10,6 +10,8 @@ using Paybills.API.Domain.Services;
 using Paybills.API.Domain.Services.Interfaces;
 using Paybills.API.Domain.Services.Impl;
 using Serilog;
+using Paybills.API.Infrastructure.Data.Repositories.Impl;
+using Paybills.API.Infrastructure.Data.Repositories.Interfaces;
 
 namespace Paybills.API.Extensions
 {
@@ -17,8 +19,7 @@ namespace Paybills.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAWSService<IAmazonSimpleEmailService>()
-                    .AddTransient<SESService>();
+            services.AddAWSService<IAmazonSimpleEmailService>().AddTransient<SESService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IBillTypeService, BillTypeService>();
@@ -28,6 +29,7 @@ namespace Paybills.API.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillTypeRepository, BillTypeRepository>();
+            services.AddScoped<IReceivingTypeRepository, ReceivingTypeRepository>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 

@@ -36,7 +36,7 @@ namespace Paybills.UnitTests.Controllers
 
             var list = ModelUtils.GenerateRandomPagedReceivingsList(expectedSize);
 
-            mockReceivingRepo.Setup(repo => repo.GetReceivingsAsync(
+            mockReceivingRepo.Setup(repo => repo.GetAsync(
                 userName, It.IsAny<UserParams>())).Returns(Task.FromResult(list));
 
             mockMapper.Setup(mapper => mapper.Map<IEnumerable<ReceivingDto>>(It.IsAny<PagedList<Receiving>>())).Returns(

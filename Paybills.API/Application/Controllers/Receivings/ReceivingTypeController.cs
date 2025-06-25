@@ -22,7 +22,7 @@ namespace Paybills.API.Application.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<ReceivingTypeDto>> Create(ReceivingTypeRegisterDto receivingTypeRegisterDto)
         {
             if (await _service.Exists(receivingTypeRegisterDto.Description)) return BadRequest("Receiving type already exists");

@@ -7,7 +7,6 @@ using Paybills.API.Data;
 using Paybills.API.Domain.Entities;
 using Paybills.API.Helpers;
 using Paybills.API.Infrastructure.Data.Repositories.Interfaces;
-using Paybills.API.Interfaces;
 
 namespace Paybills.API.Infrastructure.Data.Repositories.Impl
 {

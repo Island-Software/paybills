@@ -1,17 +1,20 @@
 using System;
-using Paybills.API.Application.DTOs.ReceivingType;
+using System.ComponentModel.DataAnnotations;
 
 namespace Paybills.API.Application.DTOs.Receiving
 {
-    public class ReceivingDto
+    public class ReceivingRegisterDto
     {
-        public int Id { get; set; }
-        public ReceivingTypeDto ReceivingType { get; set; }
+        [Required]
+        public int TypeId { get; set; }
         public float Value { get; set; }
+        [Required]
         public int Month { get; set; }
+        [Required]
         public int Year { get; set; }
         public DateTime? ReceivingDate { get; set; }
         public bool Received { get; set; }
-        public string[] UserName { get; set; }
+        [Required]
+        public int UserId { get; set; }
     }
 }

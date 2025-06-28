@@ -29,6 +29,7 @@ namespace Paybills.API.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillTypeRepository, BillTypeRepository>();
+            services.AddScoped<IReceivingRepository, ReceivingRepository>();
             services.AddScoped<IReceivingTypeRepository, ReceivingTypeRepository>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);

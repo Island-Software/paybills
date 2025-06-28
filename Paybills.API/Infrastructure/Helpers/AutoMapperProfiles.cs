@@ -25,6 +25,12 @@ namespace Paybills.API.Helpers
                                                select user.UserName)));
             CreateMap<ReceivingType, ReceivingTypeDto>();
             CreateMap<ReceivingTypeDto, ReceivingType>();
+
+            CreateMap<ReceivingRegisterDto, Receiving>()
+                .ForMember(dest => dest.ReceivingType,
+                    opt => opt.Ignore())
+                .ForMember(dest => dest.Users,
+                    opt => opt.Ignore());
         }
     }
 }

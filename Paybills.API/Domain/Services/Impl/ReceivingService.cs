@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Paybills.API.Domain.Entities;
 using Paybills.API.Domain.Services.Interfaces;
@@ -18,49 +16,22 @@ namespace Paybills.API.Domain.Services.Impl
             _repository = repository;
         }
 
-        public Task<bool> AddToUser(int userId, int receivingId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> AddToUser(int userId, int receivingId) => await _repository.AddToUserAsync(userId, receivingId);
 
-        public Task<bool> AddToUser(int userId, IEnumerable<Receiving> receivings)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> AddToUser(int userId, IEnumerable<Receiving> receivings) => await _repository.AddToUserAsync(userId, receivings);
 
-        public Task<bool> CopyToNextMonth(int userId, int currentMonth, int currentYear)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> CopyToNextMonth(int userId, int currentMonth, int currentYear) => await _repository.CopyToNextMonthAsync(userId, currentMonth, currentYear);
 
-        public Task<bool> Create(Receiving receiving)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<bool> Create(Receiving receiving) => await _repository.CreateAsync(receiving);
 
-        public Task<bool> Delete(Receiving receiving)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<bool> Delete(Receiving receiving) => _repository.DeleteAsync(receiving);
 
-        public Task<PagedList<Receiving>> GetAsync(string username, UserParams userParams)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PagedList<Receiving>> GetAsync(string username, UserParams userParams) => _repository.GetAsync(username, userParams);
 
-        public Task<PagedList<Receiving>> GetByDateAsync(string username, int month, int year, UserParams userParams)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<PagedList<Receiving>> GetByDateAsync(string username, int month, int year, UserParams userParams) => _repository.GetByDateAsync(username, month, year, userParams);
 
-        public Task<Receiving> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Receiving> GetByIdAsync(int id) => _repository.GetByIdAsync(id);
 
-        public Task<bool> Update(Receiving receiving)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<bool> Update(Receiving receiving) => _repository.UpdateAsync(receiving);
     }
 }

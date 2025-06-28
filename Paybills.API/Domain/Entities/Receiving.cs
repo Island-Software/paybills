@@ -13,7 +13,7 @@ namespace Paybills.API.Domain.Entities
         public float Value { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
-        public DateTime ReceivingDate { get; set; }
+        public DateTime? ReceivingDate { get; set; }
         public bool Received { get; set; } = false;
         public ICollection<AppUser> Users { get; set; }        
     }

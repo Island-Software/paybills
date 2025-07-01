@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Paybills.API.Data;
@@ -9,9 +10,10 @@ using Paybills.API.Data;
 namespace Paybills.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250619191425_AddReceivings")]
+    partial class AddReceivings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,21 +34,6 @@ namespace Paybills.API.Data.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("AppUserBill");
-                });
-
-            modelBuilder.Entity("AppUserReceiving", b =>
-                {
-                    b.Property<int>("ReceivingsId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ReceivingsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("AppUserReceiving");
                 });
 
             modelBuilder.Entity("Paybills.API.Domain.Entities.Bill", b =>
@@ -112,7 +99,7 @@ namespace Paybills.API.Data.Migrations
                     b.Property<bool>("Received")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ReceivingDate")
+                    b.Property<DateTime>("ReceivingDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("ReceivingTypeId")
@@ -177,10 +164,15 @@ namespace Paybills.API.Data.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .HasColumnType("bytea");
 
+                    b.Property<int?>("ReceivingId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserName")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceivingId");
 
                     b.ToTable("Users");
                 });
@@ -190,21 +182,6 @@ namespace Paybills.API.Data.Migrations
                     b.HasOne("Paybills.API.Domain.Entities.Bill", null)
                         .WithMany()
                         .HasForeignKey("BillsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Paybills.API.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AppUserReceiving", b =>
-                {
-                    b.HasOne("Paybills.API.Domain.Entities.Receiving", null)
-                        .WithMany()
-                        .HasForeignKey("ReceivingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -231,6 +208,18 @@ namespace Paybills.API.Data.Migrations
                         .HasForeignKey("ReceivingTypeId");
 
                     b.Navigation("ReceivingType");
+                });
+
+            modelBuilder.Entity("Paybills.API.Entities.AppUser", b =>
+                {
+                    b.HasOne("Paybills.API.Domain.Entities.Receiving", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ReceivingId");
+                });
+
+            modelBuilder.Entity("Paybills.API.Domain.Entities.Receiving", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

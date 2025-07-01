@@ -1,6 +1,6 @@
-namespace Paybills.API.DTOs
+namespace Paybills.API.Application.DTOs.ReceivingType
 {
-    public class BillTypeDto
+    public class ReceivingTypeDto
     {
         public int Id { get; set; }
         public string Description { get; set; }

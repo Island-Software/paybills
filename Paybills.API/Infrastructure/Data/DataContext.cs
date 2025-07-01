@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Data
 {
@@ -40,5 +41,8 @@ namespace Paybills.API.Data
         public DbSet<AppUser> Users { get; set; }
         public DbSet<BillType> BillTypes { get; set; }
         public DbSet<Bill> Bills { get; set; }
+        public DbSet<ReceivingType> ReceivingTypes { get; set; }
+        public DbSet<Receiving> Receivings { get; set; }
+
     }
 }

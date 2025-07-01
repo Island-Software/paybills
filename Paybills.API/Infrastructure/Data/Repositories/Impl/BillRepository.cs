@@ -5,12 +5,14 @@ using Paybills.API.Entities;
 using Paybills.API.Helpers;
 using Paybills.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Paybills.API.Domain.Entities;
 
 namespace Paybills.API.Data
 {
     public class BillRepository : RepositoryBase, IBillRepository
     {
         private IBillTypeRepository _billTypeRepository { get; }
+
         public BillRepository(DataContext context, IBillTypeRepository billTypeRepository) : base(context)
         {
             _billTypeRepository = billTypeRepository;
@@ -123,19 +125,13 @@ namespace Paybills.API.Data
                 // _context.Entry(bill.BillType).State = EntityState.Unchanged;
 
                 var newBill = new Bill();
-                var billType = await _billTypeRepository.GetBillTypeByIdAsync(bill.BillType.Id);
+                var billType = await _billTypeRepository.GetByIdAsync(bill.BillType.Id);
+
                 newBill.BillType = billType;
                 newBill.Month = bill.Month;
                 newBill.Year = bill.Year;
-                if (bill.Month == 12)
-                {
-                    newBill.Month = 1;
-                    newBill.Year += 1;
-                }
-                else
-                {
-                    newBill.Month += 1;
-                }
+                newBill.Month = bill.Month == 12 ? 1 : bill.Month + 1;
+                newBill.Year = bill.Month == 12 ? bill.Year + 1 : bill.Year;
 
                 await CreateAsync(newBill);
 

@@ -1,7 +1,7 @@
 build-all:
 	dotnet build && cd client && ng build
 
-buid-api:
+build-api:
 	dotnet build
 
 build-client:

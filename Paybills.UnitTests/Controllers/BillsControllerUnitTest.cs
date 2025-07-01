@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Paybills.API.Controllers;
 using Paybills.API.DTOs;
-using Paybills.API.Entities;
+using Paybills.API.Domain.Entities;
 using Paybills.API.Helpers;
-using Paybills.API.Interfaces;
 using FluentAssertions;
 using System.Net;
 using Paybills.UnitTests.Utils;
@@ -188,14 +187,14 @@ namespace Paybills.UnitTests.Controllers
 
             var controller = new BillsController(mockBillRepo.Object, mockBillTypeRepo.Object, mockMapper.Object, sesService.Object);
 
-            mockBillTypeRepo.Setup(m => m.GetBillTypeByIdAsync(billRegDto.TypeId)).Returns(Task.FromResult(billType));
+            mockBillTypeRepo.Setup(m => m.GetByIdAsync(billRegDto.TypeId)).Returns(Task.FromResult(billType));
             mockMapper.Setup(m => m.Map<BillDto>(It.IsAny<Bill>())).Returns(createdBill);
 
             // When
             var result = await controller.Create(billRegDto);
         
             // Then
-            mockBillTypeRepo.Verify(m => m.GetBillTypeByIdAsync(billRegDto.TypeId), Times.Once);
+            mockBillTypeRepo.Verify(m => m.GetByIdAsync(billRegDto.TypeId), Times.Once);
             mockBillRepo.Verify(m => m.Create(It.IsAny<Bill>()));
         }
 
@@ -205,7 +204,7 @@ namespace Paybills.UnitTests.Controllers
             // Given
             Mock<IBillService> mockBillService = new Mock<IBillService>();
             Mock<IBillTypeService> mockBillTypeService = new Mock<IBillTypeService>();
-            Mock<IMapper> mockMapper = new Moq.Mock<IMapper>();
+            Mock<IMapper> mockMapper = new Mock<IMapper>();
             Mock<SESService> sesService = new Mock<SESService>();
 
             var controller = new BillsController(mockBillService.Object, mockBillTypeService.Object, mockMapper.Object, sesService.Object);

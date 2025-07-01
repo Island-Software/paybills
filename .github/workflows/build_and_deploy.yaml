@@ -1,0 +1,40 @@
+name: Backend API build & deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Publish .NET app
+      run: |
+        dotnet publish .\Paybills.API\ -c Release -o ./publish
+
+    - name: Upload app files to VM
+      uses: appleboy/scp-action@v1.0.0
+      with:
+        host: ${{ secrets.AZURE_VM_HOST }}
+        username: ${{ secrets.AZURE_VM_USER }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        source: ./publish/*
+        target: /var/www/billminder-api
+
+    - name: Restart systemd service on VM
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.AZURE_VM_HOST }}
+        username: ${{ secrets.AZURE_VM_USER }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        script: |
+          sudo systemctl daemon-reload
+          sudo systemctl restart billminder-api.service

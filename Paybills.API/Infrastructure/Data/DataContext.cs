@@ -32,7 +32,7 @@ namespace Paybills.API.Data
             var pgPassword = Environment.GetEnvironmentVariable("PG_PASSWORD");
             var pgDb = Environment.GetEnvironmentVariable("PG_DB");
 
-            var connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPassword};Database={pgDb};SSL Mode=Disable";
+            var connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPassword};Database={pgDb};Ssl Mode=Require;Trust Server Certificate=true";
 
             optionsBuilder.UseNpgsql(connStr);
 

@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Paybills.API.Domain.Services;
 using Paybills.API.Domain.Services.Interfaces;
 using Paybills.API.Domain.Services.Impl;
-using Serilog;
 using Paybills.API.Infrastructure.Data.Repositories.Impl;
 using Paybills.API.Infrastructure.Data.Repositories.Interfaces;
 
@@ -38,8 +37,6 @@ namespace Paybills.API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-
-            services.AddSerilog();
 
             return services;
         }

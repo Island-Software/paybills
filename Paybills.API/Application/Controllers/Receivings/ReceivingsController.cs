@@ -19,7 +19,7 @@ namespace Paybills.API.Application.Controllers
         private readonly IReceivingService _receivingService;
         private readonly IMapper _mapper;
         private readonly IReceivingTypeService _receivingTypeService;
-        private readonly IUserService _userService;
+        // private readonly IUserService _userService;
 
         public ReceivingsController(IReceivingService receivingService, IMapper mapper, IReceivingTypeService receivingTypeService)
         {

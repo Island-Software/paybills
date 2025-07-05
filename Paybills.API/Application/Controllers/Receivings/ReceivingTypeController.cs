@@ -57,8 +57,8 @@ namespace Paybills.API.Application.Controllers
 
             var repoReceivingType = await _service.GetByIdAsync(id);
 
-            repoReceivingType.Description = repoReceivingType.Description;
-            repoReceivingType.Active = repoReceivingType.Active;
+            repoReceivingType.Description = receivingType.Description;
+            repoReceivingType.Active = receivingType.Active;
 
             await _service.Update(repoReceivingType);
 

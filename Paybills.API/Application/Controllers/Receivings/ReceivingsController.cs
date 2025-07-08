@@ -46,13 +46,24 @@ namespace Paybills.API.Application.Controllers
         [Route("name/{username}/{month}/{year}")]
         public async Task<ActionResult<IEnumerable<ReceivingDto>>> GetByDate(string username, int month, int year, [FromQuery] UserParams userParams)
         {
-            var receivings = await _receivingService.GetByDateAsync(username, month, year, userParams);
+            if (userParams.PageSize > 0)
+            {
+                var receivings = await _receivingService.GetByDateAsync(username, month, year, userParams);
 
-            Response.AddPaginationHeader(receivings.CurrentPage, receivings.PageSize, receivings.TotalCount, receivings.TotalPages);
+                Response.AddPaginationHeader(receivings.CurrentPage, receivings.PageSize, receivings.TotalCount, receivings.TotalPages);
 
-            var receivingsToReturn = _mapper.Map<IEnumerable<ReceivingDto>>(receivings);
+                var receivingsToReturn = _mapper.Map<IEnumerable<ReceivingDto>>(receivings);
 
-            return Ok(receivingsToReturn);
+                return Ok(receivingsToReturn);
+            }
+            else
+            {
+                var receivings = await _receivingService.GetByDateAsync(username, month, year);
+
+                var receivingsToReturn = _mapper.Map<IEnumerable<ReceivingDto>>(receivings);
+
+                return Ok(receivingsToReturn);
+            }
         }
         
         [HttpGet("{id}")]

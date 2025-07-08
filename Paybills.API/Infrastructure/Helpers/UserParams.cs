@@ -3,7 +3,7 @@ namespace Paybills.API.Helpers
     public class UserParams
     {
         private const int MaxPageSize = 50;
-        private int _pageSize = 10;
+        private int _pageSize;
         public int PageNumber { get; set; } = 1;
         public int PageSize
         {

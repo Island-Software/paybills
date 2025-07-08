@@ -78,6 +78,16 @@ namespace Paybills.API.Data
             return await PagedList<Bill>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }
 
+        public Task<List<Bill>> GetBillsByDateAsync(string username, int month, int year)
+        {
+            return _context.Bills
+                .Include(b => b.BillType)
+                .Where(b => b.Users.Count(u => u.UserName == username) > 0 && b.Month == month && b.Year == year)
+                .OrderBy(b => b.Id)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<Bill> GetBillByIdAsync(int id) => await _context.Bills.Include(b => b.BillType).SingleAsync(b => b.Id == id);
 
         public async Task<bool> UpdateAsync(Bill bill)
@@ -138,6 +148,6 @@ namespace Paybills.API.Data
                 newBills.Add(newBill);
             }
             return await AddBillsToUserAsync(userId, newBills);
-        }
+        }        
     }
 }

@@ -9,8 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Paybills.API.Data;
 using Paybills.API.Infrastructure.Helpers;
-using Serilog;
-using Serilog.Events;
+// using Serilog;
+// using Serilog.Events;
 // using Serilog.Sinks.Elasticsearch;
 
 namespace Paybills.API
@@ -54,18 +54,18 @@ namespace Paybills.API
 
                 
 
-            Log.Logger = new LoggerConfiguration()
-            //     .Enrich.FromLogContext()
-                .WriteTo.Debug()
-                .WriteTo.Console()
+            // Log.Logger = new LoggerConfiguration()
+            // //     .Enrich.FromLogContext()
+            //     .WriteTo.Debug()
+            //     .WriteTo.Console()
 
-                // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
-                //     IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
-                //     AutoRegisterTemplate = true
-                // })
+            //     // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200")) {
+            //     //     IndexFormat = $"paybills-api-{DateTime.UtcNow:yyyy-MM}",
+            //     //     AutoRegisterTemplate = true
+            //     // })
 
-                // .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+            //     // .ReadFrom.Configuration(configuration)
+            //     .CreateLogger();
         }
 
         // private static ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)

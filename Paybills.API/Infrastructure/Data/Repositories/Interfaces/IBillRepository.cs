@@ -15,6 +15,7 @@ namespace Paybills.API.Interfaces
         Task<bool> SaveAllAsync();
         Task<PagedList<Bill>> GetBillsAsync(string username, UserParams userParams);
         Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams);
+        Task<List<Bill>> GetBillsByDateAsync(string username, int month, int year);
         Task<Bill> GetBillByIdAsync(int id);
         Task<bool> AddBillToUserAsync(int userId, int billId);
         Task<bool> AddBillsToUserAsync(int userId, IEnumerable<Bill> bills);

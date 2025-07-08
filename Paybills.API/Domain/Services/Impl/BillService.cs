@@ -32,6 +32,11 @@ namespace Paybills.API.Domain.Services.Impl
 
         public Task<PagedList<Bill>> GetBillsByDateAsync(string username, int month, int year, UserParams userParams) => _repository.GetBillsByDateAsync(username, month, year, userParams);
 
+        public Task<List<Bill>> GetBillsByDateAsync(string username, int month, int year)
+        {
+            return _repository.GetBillsByDateAsync(username, month, year);
+        }
+
         public Task<bool> Update(Bill bill) => _repository.UpdateAsync(bill);
     }
 }
